@@ -5,63 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Page</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/style/style.css">
 </head>
 
 <body class="light-mode transition-colors duration-500">
-  <div class="relative w-full h-screen overflow-hidden">
+    <div class="relative w-full h-screen overflow-hidden">
 
-    <!-- Building -->
-    <img src="assets/uebuilding.png" alt="uebuilding" class="uebuilding absolute object-cover object-left -z-10">
+        <!-- Building -->
+        <img src="assets/images/uebuilding.png" alt="uebuilding" class="uebuilding absolute object-cover object-left -z-10">
 
-    <!-- Lualhati Statue -->
-    <img src="assets/lualhati.png"class="lualhati absolute mt-80  w-1/2 object-cover object-left rotate-[11deg] -z-10">
+        <!-- Lualhati Statue -->
+        <img src="assets/images/lualhati.png"class="lualhati absolute mt-80  w-1/2 object-cover object-left rotate-[11deg] -z-10">
 
-    <!-- Your login -->
-    <div class="relative z-20 flex flex-col items-center justify-center h-full">
-      
-      <!-- Logo -->
-      <img src="assets/uelogo.png" alt="UE Logo" class="w-3/4 max-w-xs mb-4">
+        <!-- Your login -->
+        <div class="relative z-20 flex flex-col items-center justify-center h-full">
+        
+            <!-- Logo -->
+            <img src="assets/images/uelogo.png" alt="UE Logo" class="w-3/4 max-w-xs mb-4">
 
-      <!-- Dark Mode Toggle -->
-      <div class="w-3/4 max-w-md mb-4 flex justify-center">
-        <label class="relative inline-block w-14 h-8">
-          <input type="checkbox" id="darkModeToggle" class="hidden">
-          <span id="slider" class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
-            <span id="sliderCircle" class="slider-circle flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg">☀️</span>
-          </span>
-        </label>
-      </div>
+            <!-- Dark Mode Toggle -->
+            <div class="w-3/4 max-w-md mb-4 flex justify-center">
+                <label class="relative inline-block w-14 h-8">
+                <input type="checkbox" id="darkModeToggle" class="hidden">
+                <span id="slider" class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
+                    <span id="sliderCircle" class="slider-circle flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg">☀️</span>
+                </span>
+                </label>
+            </div>
 
-      <!-- Username & Password -->
-      <input type="text" id="username" placeholder="Username" class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70 mb-3">
-      <input type="password" id="password" placeholder="Password" class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70 mb-6">
+            <!-- Username & Password -->
+            <input type="text" id="username" placeholder="Username" class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70 mb-3">
+            <input type="password" id="password" placeholder="Password" class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70 mb-6">
 
-      <!-- Login Button -->
-      <button id="loginButton" onclick="login()" class="w-3/4 max-w-md h-12 rounded-md text-lg text-white cursor-pointer bg-gradient-to-b from-[#731919] to-[#e52b2b] hover:opacity-90 transition duration-300 border-none disabled:opacity-50 disabled:cursor-not-allowed mb-3">
-        Login
-      </button>
+            <!-- Login Button -->
+            <button id="loginButton" onclick="login()" class="w-3/4 max-w-md h-12 rounded-md text-lg text-white cursor-pointer bg-gradient-to-b from-[#731919] to-[#e52b2b] hover:opacity-90 transition duration-300 border-none disabled:opacity-50 disabled:cursor-not-allowed mb-3">
+                Login
+            </button>
 
-      <!-- Error Message -->
-      <p id="error-message" class="text-red-600 text-center text-sm"></p>
+            <!-- Error Message -->
+            <p id="error-message" class="text-white text-center text-sm"></p>
+        </div>
+
+        <!-- Hills Effect -->
+        <div class="relative w-full h-64">
+        <svg viewBox="0 0 1440 320" class="wave absolute left-0 w-full h-full">
+            <defs>
+            <linearGradient id="fadeGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#fa4e1d" stop-opacity="1" />
+                <stop offset="100%" stop-color="#fa4e1d" stop-opacity="0" />
+            </linearGradient>
+            </defs>
+
+            <path fill="url(#fadeGradient)" d="M0,160 
+            C 240,80 480,240 720,160 
+            C 960,80 1200,240 1440,160 
+            L1440,320 L0,320 Z"></path>
+        </svg>
+        </div>
     </div>
-
-    <!-- Hills Effect -->
-    <div class="relative w-full h-64">
-      <svg viewBox="0 0 1440 320" class="wave absolute left-0 w-full h-full">
-        <defs>
-          <linearGradient id="fadeGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#fa4e1d" stop-opacity="1" />
-            <stop offset="100%" stop-color="#fa4e1d" stop-opacity="0" />
-          </linearGradient>
-        </defs>
-
-        <path fill="url(#fadeGradient)" d="M0,160 
-          C 240,80 480,240 720,160 
-          C 960,80 1200,240 1440,160 
-          L1440,320 L0,320 Z"></path>
-      </svg>
-    </div>
-  </div>
+    
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
