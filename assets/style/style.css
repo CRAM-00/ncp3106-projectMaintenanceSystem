@@ -1,0 +1,33 @@
+.light-mode {
+    background: linear-gradient(90deg, #a6a6a6, #ffffff);
+    color: black;
+}
+
+.dark-mode {
+    background-color: black;
+    color: white;
+}
+
+.slider-circle {
+    transition: transform 0.4s ease, background-color 0.4s ease;
+}
+
+.lualhati {
+    margin-left: -16vw;
+    transform: rotate(6);
+}
+
+.wave{
+    margin-top: -40vb;
+    width: auto;
+    height: auto;
+    transform: scale(4);
+}
+
+.uebuilding{
+    margin-top: 55vb;
+    margin-left: 40vw;
+    width: 40vw;
+    height: auto;
+    transform: scale(3);
+}
