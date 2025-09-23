@@ -34,4 +34,24 @@ const correctUsername = {
       }
     });
 
+    const toggle = document.getElementById("darkModeToggle");
+    const slider = document.getElementById("slider");
+    const sliderCircle = document.getElementById("sliderCircle");
+
+    toggle.addEventListener("change", function () {
+    document.body.classList.toggle("dark-mode", this.checked);
+    document.body.classList.toggle("light-mode", !this.checked);
+
+
+    if (this.checked) {
+        slider.classList.replace("bg-yellow-400", "bg-gray-800");
+        sliderCircle.style.transform = "translateX(26px)";
+        sliderCircle.textContent = "🌙";
+    } else {
+        slider.classList.replace("bg-gray-800", "bg-yellow-400");
+        sliderCircle.style.transform = "translateX(0)";
+        sliderCircle.textContent = "☀️";
+    }
+});
+
 
