@@ -5,7 +5,7 @@ const correctUsername = {
 }
 
 function login() {
-  const enteredUsername = document.getElementById("username").value.trim();
+  const enteredUsername = document.getElementById("email").value.trim();
   const enteredPassword = document.getElementById("password").value.trim();
   const errorMessage = document.getElementById("error-message");
   const loginButton = document.getElementById("loginButton");
@@ -21,7 +21,7 @@ function login() {
     if (correctUsername[enteredUsername] && correctUsername[enteredUsername] === enteredPassword) {
       window.location.href = "secondpage.html";
     } else {
-      errorMessage.textContent = "Incorrect username or password!";
+      errorMessage.textContent = "Incorrect email or password!";
       loginButton.disabled = false;
       loginButton.textContent = "Login";
     }
@@ -51,6 +51,23 @@ document.body.classList.toggle("light-mode", !this.checked);
       sliderCircle.style.transform = "translateX(0)";
       sliderCircle.textContent = "☀️";
   }
+});
+
+const signUpButton = document.getElementById('signUpButton');
+const signInButton = document.getElementById('signInButton');
+const loginForm = document.getElementById('login');
+const signUpForm = document.getElementById('signup');
+
+// Show Register
+signUpButton.addEventListener('click', function () {
+  loginForm.style.display = "none";
+  signUpForm.style.display = "flex";
+});
+
+// Back to Login
+signInButton.addEventListener('click', function () {
+  signUpForm.style.display = "none";
+  loginForm.style.display = "flex";
 });
 
 

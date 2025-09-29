@@ -31,3 +31,9 @@
     height: auto;
     transform: scale(3);
 }
+
+.register {
+  font-size: 50px;
+  color: #fa4e1d;
+}
+
