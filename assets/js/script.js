@@ -17,7 +17,6 @@ function login() {
   loginButton.textContent = "Logging in...";
 
   setTimeout(() => {
-    // check if username exists and password matches
     if (correctUsername[enteredUsername] && correctUsername[enteredUsername] === enteredPassword) {
       window.location.href = "secondpage.html";
     } else {
@@ -57,6 +56,7 @@ const signUpButton = document.getElementById('signUpButton');
 const signInButton = document.getElementById('signInButton');
 const loginForm = document.getElementById('login');
 const signUpForm = document.getElementById('signup');
+const registerButton = document.getElementById('registerButton');
 
 // Show Register
 signUpButton.addEventListener('click', function () {
@@ -70,4 +70,46 @@ signInButton.addEventListener('click', function () {
   loginForm.style.display = "flex";
 });
 
+
+function register(event) {
+  event.preventDefault();
+
+  const enteredUsername = document.getElementById("regEmail").value.trim();
+  const enteredPassword = document.getElementById("regPassword").value.trim();
+  const userType = document.getElementById("userType").value.trim();
+  const firstName = document.getElementById("fName").value.trim();
+  const lastName = document.getElementById("lName").value.trim();
+
+  if (!firstName || !lastName || !enteredUsername || !enteredPassword || userType === "") {
+      alert("Please fill all fields and select a role.");
+    return;
+  }
+
+  registerButton.disabled = true;
+  registerButton.textContent = "Registering...";
+
+  setTimeout(() => {
+    registerButton.disabled = false;
+    registerButton.textContent = "Register";
+
+    localStorage.setItem(enteredUsername, JSON.stringify({
+      firstName,
+      lastName,
+      password: enteredPassword,
+      role: userType
+    }));
+
+    alert("Registration successful! Please login.");
+
+    document.getElementById("regEmail").value = "";
+    document.getElementById("regPassword").value = "";
+    document.getElementById("userType").value = "";
+    document.getElementById("fName").value = "";
+    document.getElementById("lName").value = "";
+
+    signUpForm.style.display = "none";
+    loginForm.style.display = "flex";
+  }, 2000);
+}
+registerButton.addEventListener("click", register);
 
