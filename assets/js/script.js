@@ -71,6 +71,7 @@ signInButton.addEventListener('click', function () {
 });
 
 
+
 function register(event) {
   event.preventDefault();
 
@@ -111,5 +112,6 @@ function register(event) {
     loginForm.style.display = "flex";
   }, 2000);
 }
-registerButton.addEventListener("click", register);
+
+
 
