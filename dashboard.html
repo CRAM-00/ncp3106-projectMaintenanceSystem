@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/style/style.css">
+</head>
+<body class="light-mode transition-colors duration-500 font-sans">
+  <div class="relative w-full h-screen overflow-hidden">
+
+    <h1 class="mt-20 w-auto max-w-auto text-center text-4xl font-bold text-black-700">Maintenance Reports & News</h1>
+
+    
+    <!-- Background -->
+    <img src="assets/images/uelogo.png" 
+         alt="UE Logo" 
+         class="absolute inset-0 w-full h-full object-cover opacity-20 -z-10">
+  </div>
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 left-0 w-full bg-red-600/90 backdrop-blur-md shadow-md z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        
+        <!-- Logo -->
+        <a href="#" class="text-white text-xl font-bold">University of the East</a>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex space-x-6">
+          <a href="#home" class="text-white hover:text-red-300 transition">Home</a>
+          <a href="#services" class="text-white hover:text-red-300 transition">Service Report</a>
+          <a href="#about" class="text-white hover:text-red-300 transition">About</a>
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <button id="menu-btn" 
+                class="md:hidden text-white text-2xl focus:outline-none">
+          ☰
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden bg-red-700 px-4 py-3 space-y-2">
+      <a href="#home" class="block text-white hover:text-red-300">Home</a>
+      <a href="#services" class="block text-white hover:text-red-300">Service Report</a>
+      <a href="#about" class="block text-white hover:text-red-300">About</a>
+    </div>
+  </nav>
+
+
+
+</body>
+</html>
