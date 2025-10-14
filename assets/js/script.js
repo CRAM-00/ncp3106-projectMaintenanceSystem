@@ -115,27 +115,7 @@ function register(event) {
 
 
 // Admin Dashboard
-const body = document.getElementById("body");
-    const toggleBtn = document.getElementById("toggleTheme");
-    const title = document.getElementById("mainTitle");
-    let darkMode = false;
 
-    toggleBtn.addEventListener("click", () => {
-      darkMode = !darkMode;
-      if (darkMode) {
-        body.classList.remove("bg-white", "text-gray-900");
-        body.classList.add("bg-gray-900", "text-white");
-        title.classList.remove("text-gray-800");
-        title.classList.add("text-white");
-        toggleBtn.textContent = "☀️ Light Mode";
-      } else {
-        body.classList.remove("bg-gray-900", "text-white");
-        body.classList.add("bg-white", "text-gray-900");
-        title.classList.remove("text-white");
-        title.classList.add("text-gray-800");
-        toggleBtn.textContent = "🌙 Dark Mode";
-      }
-    });
 
     // SAMPLE DATA
     const requests = [
@@ -243,17 +223,24 @@ const body = document.getElementById("body");
     renderAnnouncements();
     updateDashboard();
 
+   // Navbar mobile toggle
+    const menuBtn = document.getElementById("menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const menuIcon = document.getElementById("menu-icon");
 
+    menuBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("hidden");
 
-
-
-
-    // Mobile Menu Toggle
-    const menuBtn = document.getElementById('menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    menuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
+      // Toggle between hamburger and X icon
+      if (mobileMenu.classList.contains("hidden")) {
+        menuIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M4 6h16M4 12h16M4 18h16" />`;
+      } else {
+        menuIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M6 18L18 6M6 6l12 12" />`;
+      }
     });
+
 
     // Report Form Submit
     document.getElementById('reportForm').addEventListener('submit', (e) => {
