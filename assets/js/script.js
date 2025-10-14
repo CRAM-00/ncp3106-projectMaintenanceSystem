@@ -245,35 +245,8 @@ const body = document.getElementById("body");
 
 
 
-    //Dashboard Dark Mode Toggle
-     const toggle = document.getElementById('theme-toggle');
-      const body = document.body;
 
-    toggle.addEventListener('click', () => {
-      body.classList.toggle('dark-mode');
-      const isDark = body.classList.contains('dark-mode');
 
-      body.classList.toggle('bg-gray-900', isDark);
-      body.classList.toggle('text-white', isDark);
-      body.classList.toggle('bg-gray-100', !isDark);
-      toggle.textContent = isDark ? '☀️' : '🌙';
-
-      // Change h1 colors
-      document.querySelectorAll('h1').forEach(h1 => {
-        h1.style.color = isDark ? 'white' : 'black';
-      });
-
-      // Adjust card backgrounds and text for dark mode
-      document.querySelectorAll('.card').forEach(card => {
-        if (isDark) {
-          card.classList.remove('bg-white', 'text-gray-900');
-          card.classList.add('bg-gray-800', 'text-gray-100');
-        } else {
-          card.classList.remove('bg-gray-800', 'text-gray-100');
-          card.classList.add('bg-white', 'text-gray-900');
-        }
-      });
-    });
 
     // Mobile Menu Toggle
     const menuBtn = document.getElementById('menu-btn');
