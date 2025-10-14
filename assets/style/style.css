@@ -41,3 +41,11 @@
     
 }
 
+
+/* Dashboard */
+.dark-mode .card,
+.dark-mode .card0 {
+    background-color: #1e1e1e;
+    color: #f3f3f3;
+}
+
