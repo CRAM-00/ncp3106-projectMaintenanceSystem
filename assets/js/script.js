@@ -78,4 +78,177 @@ menuBtn.addEventListener("click", () => {
 mobileMenu.classList.toggle("hidden");
 });
 
+// Admin Dashboard
+const body = document.getElementById("body");
+    const toggleBtn = document.getElementById("toggleTheme");
+    const title = document.getElementById("mainTitle");
+    let darkMode = false;
 
+    toggleBtn.addEventListener("click", () => {
+      darkMode = !darkMode;
+      if (darkMode) {
+        body.classList.remove("bg-white", "text-gray-900");
+        body.classList.add("bg-gray-900", "text-white");
+        title.classList.remove("text-gray-800");
+        title.classList.add("text-white");
+        toggleBtn.textContent = "☀️ Light Mode";
+      } else {
+        body.classList.remove("bg-gray-900", "text-white");
+        body.classList.add("bg-white", "text-gray-900");
+        title.classList.remove("text-white");
+        title.classList.add("text-gray-800");
+        toggleBtn.textContent = "🌙 Dark Mode";
+      }
+    });
+
+    // SAMPLE DATA
+    const requests = [
+      { id: 1, title: "Electrical Issue - Room 105", reporter: "John Doe", date: "10/07/2025", status: "Pending", comment: "" },
+      { id: 2, title: "Plumbing Issue - CR 2nd Floor", reporter: "Maria Cruz", date: "10/06/2025", status: "In Progress", comment: "" },
+    ];
+
+    const announcements = [
+      { id: 1, title: "Scheduled Maintenance: Engineering Building", desc: "AC maintenance on floors 3–5 this weekend." },
+      { id: 2, title: "Elevator Repair Completed", desc: "The main building elevator is now operational." },
+    ];
+
+    function updateDashboard() {
+      document.getElementById("totalRequests").textContent = requests.length;
+      document.getElementById("pendingCount").textContent = requests.filter(r => r.status === "Pending").length;
+      document.getElementById("inProgressCount").textContent = requests.filter(r => r.status === "In Progress").length;
+      document.getElementById("completedCount").textContent = requests.filter(r => r.status === "Completed").length;
+    }
+
+    function renderRequests() {
+      const list = document.getElementById("requestsList");
+      list.innerHTML = "";
+      requests.forEach(r => {
+        const li = document.createElement("li");
+        li.className = "border-l-4 bg-white/10 p-3 rounded";
+        li.innerHTML = `
+          <p class="font-semibold">${r.title}</p>
+          <p class="text-sm text-gray-200">Reported by: ${r.reporter} | ${r.date}</p>
+          <div class="flex items-center mt-2 gap-2">
+            <select onchange="changeStatus(${r.id}, this.value)" class="text-black px-2 py-1 rounded">
+              <option ${r.status === "Pending" ? "selected" : ""}>Pending</option>
+              <option ${r.status === "In Progress" ? "selected" : ""}>In Progress</option>
+              <option ${r.status === "Completed" ? "selected" : ""}>Completed</option>
+            </select>
+          </div>
+          <textarea id="comment-${r.id}" placeholder="Write a response..." class="w-full mt-2 p-2 text-black rounded" rows="2">${r.comment}</textarea>
+          <button onclick="saveComment(${r.id})" class="mt-2 bg-white text-[#E43636] px-3 py-1 rounded font-semibold hover:bg-gray-200">Send Response</button>
+        `;
+        list.appendChild(li);
+      });
+      updateDashboard();
+    }
+
+    function changeStatus(id, newStatus) {
+      const req = requests.find(r => r.id === id);
+      if (req) req.status = newStatus;
+      updateDashboard();
+    }
+
+    function saveComment(id) {
+      const req = requests.find(r => r.id === id);
+      const textarea = document.getElementById(`comment-${id}`);
+      if (req && textarea) {
+        req.comment = textarea.value.trim();
+        alert(`Response saved for "${req.title}"`);
+      }
+    }
+
+    function renderAnnouncements() {
+      const list = document.getElementById("announcementList");
+      list.innerHTML = "";
+      announcements.forEach(a => {
+        const div = document.createElement("div");
+        div.className = "p-3 border-l-4 border-yellow-300 bg-white/10 rounded flex justify-between items-start";
+        div.innerHTML = `
+          <div>
+            <p class="font-semibold">${a.title}</p>
+            <p class="text-sm text-gray-200">${a.desc}</p>
+          </div>
+          <button onclick="deleteAnnouncement(${a.id})" class="bg-white text-[#E43636] px-2 py-1 rounded hover:bg-gray-200">✕</button>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function toggleAnnouncementForm() {
+      const form = document.getElementById("announcementForm");
+      form.classList.toggle("hidden");
+    }
+
+    function addAnnouncement() {
+      const title = document.getElementById("announceTitle").value.trim();
+      const desc = document.getElementById("announceDesc").value.trim();
+
+      if (!title || !desc) {
+        alert("Please fill out both fields.");
+        return;
+      }
+
+      announcements.push({ id: Date.now(), title, desc });
+      document.getElementById("announceTitle").value = "";
+      document.getElementById("announceDesc").value = "";
+      toggleAnnouncementForm();
+      renderAnnouncements();
+    }
+
+    function deleteAnnouncement(id) {
+      const index = announcements.findIndex(a => a.id === id);
+      if (index !== -1) announcements.splice(index, 1);
+      renderAnnouncements();
+    }
+
+    // INITIAL LOAD
+    renderRequests();
+    renderAnnouncements();
+    updateDashboard();
+
+
+
+    //Dashboard Dark Mode Toggle
+     const toggle = document.getElementById('theme-toggle');
+      const body = document.body;
+
+    toggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      const isDark = body.classList.contains('dark-mode');
+
+      body.classList.toggle('bg-gray-900', isDark);
+      body.classList.toggle('text-white', isDark);
+      body.classList.toggle('bg-gray-100', !isDark);
+      toggle.textContent = isDark ? '☀️' : '🌙';
+
+      // Change h1 colors
+      document.querySelectorAll('h1').forEach(h1 => {
+        h1.style.color = isDark ? 'white' : 'black';
+      });
+
+      // Adjust card backgrounds and text for dark mode
+      document.querySelectorAll('.card').forEach(card => {
+        if (isDark) {
+          card.classList.remove('bg-white', 'text-gray-900');
+          card.classList.add('bg-gray-800', 'text-gray-100');
+        } else {
+          card.classList.remove('bg-gray-800', 'text-gray-100');
+          card.classList.add('bg-white', 'text-gray-900');
+        }
+      });
+    });
+
+    // Mobile Menu Toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Report Form Submit
+    document.getElementById('reportForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Your report has been submitted successfully!');
+      e.target.reset();
+    });
