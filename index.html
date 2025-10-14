@@ -25,15 +25,22 @@
 
             <!-- Dark Mode Toggle -->
             <div class="w-3/4 max-w-md mb-4 mt-4 flex justify-center">
-                <label class="relative inline-block w-14 h-8">
+            <label class="relative inline-block w-14 h-8">
                 <input type="checkbox" id="darkModeToggle" class="hidden">
                 <span id="slider" class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
-                    <span i d="sliderCircle" class="slider-circle flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg">
-                        ☀️
-                    </span>
+                <span id="sliderCircle"
+                    class="slider-circle flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg transition-transform duration-500">
+                    ☀️
                 </span>
-                </label>
+                </span>
+            </label>
             </div>
+
+            <select id="loginRole"required class="w-3/4 max-w-md h-12 rounded-md text-lg text-white cursor-pointer bg-gradient-to-b from-[#731919] to-[#e52b2b] hover:opacity-90 transition duration-300 border-none mb-3">
+                <option value="" disabled selected class="text-black">Select Role</option>
+                <option value="employee"  class="text-black">Employee</option>
+                <option value="reporter" class="text-black">Reporter</option>
+            </select>
 
             <!-- Email & Password -->
             <input type="email" id="email" placeholder="Email" class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70 mt-1">
@@ -59,6 +66,11 @@
         <!-- SignUp Form -->
         <div id="signup" class="relative z-20 flex flex-col items-center justify-center h-full" style="display: none;">
             <h1 class="register font-bold text-center">Register</h1>
+            <select id="userType"required class="w-3/4 max-w-md h-12 rounded-md text-lg text-white cursor-pointer bg-gradient-to-b from-[#731919] to-[#e52b2b] hover:opacity-90 transition duration-300 border-none mb-3">
+                <option value="" disabled selected class="text-black">Select Role</option>
+                <option value="employee"  class="text-black">Employee</option>
+                <option value="reporter" class="text-black">Reporter</option>
+            </select>
             <form method="post" action="" class="flex flex-col items-center w-full">
                 <input type="text" name="fName" id="fName" placeholder="First Name" required class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70">
 
@@ -68,9 +80,10 @@
                     
                 <input type="password" name="regPassword" id="regPassword" placeholder="Password" required class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70 mt-3">
 
-                <button type="submit" class="w-3/4 max-w-md h-12 rounded-md text-lg text-white cursor-pointer bg-gradient-to-b from-[#731919] to-[#e52b2b] hover:opacity-90 transition duration-300 border-none mt-3">
+                <button id="registerButton" type="submit" class="w-3/4 max-w-md h-12 rounded-md text-lg text-white cursor-pointer bg-gradient-to-b from-[#731919] to-[#e52b2b] hover:opacity-90 transition duration-300 border-none mt-3">
                         Register
                 </button>
+
             </form>
 
             <p class="text-sm text-sky-500 font-bold -mb-1.5">
@@ -79,6 +92,8 @@
                     Login
                 </button>
             </p>
+
+        </div>
         </div> 
 
         <!-- Hills Effect -->
