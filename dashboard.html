@@ -8,62 +8,8 @@
   <link rel="stylesheet" href="assets/style/style.css">
 </head>
 
-<body class="light-mode transition-colors duration-500 font-sans">
-<nav class="fixed top-0 left-0 w-full bg-red-600/90 backdrop-blur-md shadow-md z-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16">
-      <!-- Logo -->
-      <a href="#" class="text-white text-xl font-bold">University of the East</a>
+<body data-page="dashboard" class="light-mode transition-colors duration-500 font-sans">
 
-      <!-- Desktop Menu -->
-      <div class="hidden md:flex items-center space-x-6">
-        <a href="#home" class="text-white hover:text-red-300 transition">Home</a>
-        <a href="#services" class="text-white hover:text-red-300 transition">Service Report</a>
-        <a href="#about" class="text-white hover:text-red-300 transition">About</a>
-
-        <!-- Dark Mode Toggle -->
-        <label class="relative inline-block w-14 h-8">
-          <input type="checkbox" id="darkModeToggle" class="hidden">
-          <span id="slider"
-            class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
-            <span id="sliderCircle"
-              class="slider-circle flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg transition-transform duration-500">
-              ☀️
-            </span>
-          </span>
-        </label>
-      </div>
-
-      <!-- Mobile Menu Button -->
-      <button id="menu-btn" class="md:hidden text-white focus:outline-none">
-        <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-          viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- Mobile Dropdown -->
-  <div id="mobile-menu" class="hidden md:hidden bg-red-700 px-4 py-3 space-y-2">
-    <a href="#home" class="block text-white hover:text-red-300">Home</a>
-    <a href="#services" class="block text-white hover:text-red-300">Service Report</a>
-    <a href="#about" class="block text-white hover:text-red-300">About</a>
-
-    <!-- Dark Mode Toggle for Mobile -->
-    <label class="relative inline-block w-14 h-8">
-      <input type="checkbox" id="darkModeToggleMobile" class="hidden">
-      <span
-        class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
-        <span
-          class="flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg transition-transform duration-500">
-          ☀️
-        </span>
-      </span>
-    </label>
-  </div>
-</nav>
 
   <!-- Background -->
   <img src="assets/images/uelogo.png" 
@@ -91,20 +37,20 @@
     <h1 class="text-4xl font-bold text-center mb-6">🛠 Report a Problem</h1>
     <form id="reportForm" class="card max-w-xl mx-auto bg-white text-gray-900 p-6 rounded-2xl shadow">
       <label class="block mb-2 font-semibold">Your Name</label>
-      <input type="text" class="w-full border rounded-lg p-2 mb-4" placeholder="Enter your name" required>
+      <input type="text" class="w-full border rounded-lg p-2 mb-4 text-black" placeholder="Enter your name" required>
 
       <label class="block mb-2 font-semibold">Problem Title</label>
-      <input type="text" class="w-full border rounded-lg p-2 mb-4" placeholder="Short description" required>
+      <input type="text" class="w-full border rounded-lg p-2 mb-4 text-black" placeholder="Short description" required>
 
-      <label class="block mb-2 font-semibold">Problem Description</label>
-      <textarea class="w-full border rounded-lg p-2 mb-4" rows="4" placeholder="Describe the issue" required></textarea>
+      <label class="block mb-2 font-semibold ">Problem Description</label>
+      <textarea class="w-full border rounded-lg p-2 mb-4 text-black" rows="4" placeholder="Describe the issue" required></textarea>
 
       <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition">Submit Report</button>
     </form>
   </section>
 
   <!-- About IT Department -->
-  <section id="about" class="pt-24 px-6 pb-12">
+  <section id="about" class="pt-24 px-6 pb-20">
     <h1 class="text-4xl font-bold text-center mb-6">💻 About the IT Department</h1>
     <div class="card max-w-3xl mx-auto bg-white text-gray-900 p-6 rounded-2xl shadow text-center">
       <p>
@@ -113,6 +59,9 @@
       </p>
     </div>
   </section>
+  
+  <div id="navbar-container"></div>
+  <div id="footer-container"></div>
 
   <script src="assets/js/script.js"></script>
 

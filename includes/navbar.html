@@ -1,0 +1,55 @@
+<!-- DASHBOARD -->
+<nav class="fixed top-0 left-0 w-full bg-red-600/90 backdrop-blur-md shadow-md z-50">
+  <div class="mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 w-full">
+      <!-- Logo -->
+      <a href="#" class="text-white text-xl font-bold">University of the East</a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center space-x-6 ml-auto text-white">
+        <a href="#home">Home</a>
+        <a href="#services">Service Report</a>
+        <a href="#about">About</a>
+
+        <!-- Dark Mode Toggle -->
+        <label class="relative inline-block w-14 h-8">
+          <input type="checkbox" id="darkModeToggle" class="hidden">
+          <span id="slider"
+            class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
+            <span id="sliderCircle"
+              class="slider-circle flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg transition-transform duration-500">
+              ☀️
+            </span>
+          </span>
+        </label>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="menu-btn" class="md:hidden text-white focus:outline-none">
+        <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Dropdown -->
+  <div id="mobile-menu" class="hidden md:hidden bg-red-700 px-4 py-3 space-y-2">
+    <a href="#home" class="block text-white hover:text-red-300">Home</a>
+    <a href="#services" class="block text-white hover:text-red-300">Service Report</a>
+    <a href="#about" class="block text-white hover:text-red-300">About</a>
+
+    <!-- Dark Mode Toggle for Mobile -->
+    <label class="relative inline-block w-14 h-8">
+      <input type="checkbox" id="darkModeToggleMobile" class="hidden">
+      <span class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
+        <span id="sliderCircleMobile"
+              class="flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg transition-transform duration-500">
+          ☀️
+        </span>
+      </span>
+    </label>
+  </div>
+</nav>

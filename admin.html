@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UE Maintenance Admin</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  
 </head>
 
-<body id="body" class="relative font-sans text-gray-900 min-h-screen transition-colors duration-500 bg-white">
+<body data-page="dashboard" id="body" class="relative font-sans text-gray-900 min-h-screen transition-colors duration-500 bg-white">
 
   <!-- Background -->
   <img 
@@ -17,55 +18,51 @@
   />
 
   <!-- Navbar -->
-  <header class="bg-[#E43636] text-white shadow-md relative z-10">
-    <div class="container mx-auto flex justify-between items-center p-4">
-      <h1 class="text-lg font-bold">UE Maintenance Admin</h1>
-  
-    </div>
+<nav class="bg-[#E43636] text-white shadow-md relative z-10">
+  <div class="container mx-auto flex justify-between items-center p-4">
+    <h1 class="text-lg font-bold">UE Maintenance Admin</h1>
 
+    <!-- Dark Mode Toggle (Desktop) -->
     <label class="relative inline-block w-14 h-8">
-          <input type="checkbox" id="darkModeToggle" class="hidden">
-          <span id="slider"
+      <input type="checkbox" id="darkModeToggle" class="hidden">
+      <span id="slider"
             class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
-            <span id="sliderCircle"
+        <span id="sliderCircle"
               class="slider-circle flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg transition-transform duration-500">
-              ☀️
-            </span>
-          </span>
-        </label>
-      </div>
+          ☀️
+        </span>
+      </span>
+    </label>
 
     <!-- Mobile Menu Button -->
-      <button id="menu-btn" class="md:hidden text-white focus:outline-none">
-        <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
-          viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </div>
+    <button id="menu-btn" class="md:hidden text-white focus:outline-none">
+      <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
   </div>
 
-  <!-- Mobile Dropdown -->
+  <!-- Mobile Dropdown Menu -->
   <div id="mobile-menu" class="hidden md:hidden bg-red-700 px-4 py-3 space-y-2">
     <a href="#home" class="block text-white hover:text-red-300">Home</a>
     <a href="#services" class="block text-white hover:text-red-300">Service Report</a>
     <a href="#about" class="block text-white hover:text-red-300">About</a>
 
-    <!-- Dark Mode Toggle for Mobile -->
+    <!-- Dark Mode Toggle (Mobile) -->
     <label class="relative inline-block w-14 h-8">
       <input type="checkbox" id="darkModeToggleMobile" class="hidden">
-      <span
-        class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
-        <span
-          class="flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg transition-transform duration-500">
+      <span class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
+        <span class="flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg transition-transform duration-500">
           ☀️
         </span>
       </span>
     </label>
   </div>
 </nav>
-  </header>
+
+
 
   <!-- Header Title -->
   <div class="text-center mt-10 mb-6">
@@ -124,11 +121,9 @@
   </main>
 
   <!-- Footer -->
-  <footer class="text-center text-gray-700 text-sm pb-4 transition-colors duration-500">
-    © 2025 University of the East | Maintenance Management System
-  </footer>
+  <div id="footer-container"></div>
 
-   <script src="assets/js/script.js"></script>
+  <script src="assets/js/script.js"></script>
 
 </body>
 </html>

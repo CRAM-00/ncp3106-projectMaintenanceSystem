@@ -1,119 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Page</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="assets/style/style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>University Login & Sign Up</title>
+    <link rel="stylesheet" href="assets/style/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-
-<body class="light-mode transition-colors duration-500">
-    <div class="relative w-full h-screen overflow-hidden">
-
-        <!-- Building -->
-        <img src="assets/images/uebuilding.png" alt="uebuilding" class="uebuilding absolute object-cover object-left -z-10">
-
-        <!-- Lualhati Statue -->
-        <img src="assets/images/lualhati.png"class="lualhati absolute mt-80  w-1/2 object-cover object-left rotate-[11deg] -z-10">
-
-        <!-- login -->
-        <div id="login" class="relative z-20 flex flex-col items-center justify-center h-full">
-        
-            <!-- Logo -->
-            <img src="assets/images/uelogo.png" alt="UE Logo" class="w-auto h-auto max-w-[250px] md:max-w-[300px] lg:max-w-[400px] -mt-28 mx-auto">
-
-            <!-- Dark Mode Toggle -->
-            <div class="w-3/4 max-w-md mb-4 mt-4 flex justify-center">
-                <label class="relative inline-block w-14 h-8">
-                    <input type="checkbox" id="darkModeToggle" class="hidden">
-                    <span id="slider" class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
-                    <span id="sliderCircle"
-                        class="slider-circle flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg transition-transform duration-500">
-                        ☀️
-                    </span>
-                    </span>
-                </label>
-            </div>
-
-            <select id="loginRole"required class="w-3/4 max-w-md h-12 rounded-md text-lg text-white cursor-pointer bg-gradient-to-b from-[#731919] to-[#e52b2b] hover:opacity-90 transition duration-300 border-none mb-3">
-                <option value="" disabled selected class="text-black">Select Role</option>
-                <option value="employee"  class="text-black">Employee</option>
-                <option value="reporter" class="text-black">Reporter</option>
-            </select>
-
-            <!-- Email & Password -->
-            <input type="email" id="email" placeholder="Email" class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70 mt-1">
-            <input type="password" id="password" placeholder="Password" class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70 mt-3">
-
-            <!-- Login Button -->
-            <button id="loginButton" onclick="login()" class="w-3/4 max-w-md h-12 rounded-md text-lg text-white cursor-pointer bg-gradient-to-b from-[#731919] to-[#e52b2b] hover:opacity-90 transition duration-300 border-none disabled:opacity-50 disabled:cursor-not-allowed mt-3">
-                Login
-            </button>
-
-            <p class="text-sm text-sky-500 text-center font-bold ">
-                Don’t have an account yet? 
-                <button id="signUpButton" class="font-semibold hover:underline hover:text-gray-700">
-                    Sign Up
-                </button>
-            </p>
-
-            <!-- Error Message -->
-            <p id="error-message" class="text-white text-center text-sm h-5"></p>
-
+<body data-page="index">
+  <div class="container">
+    <div class="background"></div>
+    <div class="content">
+      <!-- LOGIN FORM -->
+      <div class="form-card active" id="loginForm" onsubmit="event.preventDefault(); handleLogin();">
+        <div class="logo-container">
+          <img src="/assets/images/uelogo.png" alt="University Logo" class="logo-img" />
         </div>
 
-        <!-- SignUp Form -->
-        <div id="signup" class="relative z-20 flex flex-col items-center justify-center h-full" style="display: none;">
-            <h1 class="register font-bold text-center">Register</h1>
-            <select id="userType"required class="w-3/4 max-w-md h-12 rounded-md text-lg text-white cursor-pointer bg-gradient-to-b from-[#731919] to-[#e52b2b] hover:opacity-90 transition duration-300 border-none mb-3">
-                <option value="" disabled selected class="text-black">Select Role</option>
-                <option value="employee"  class="text-black">Employee</option>
-                <option value="reporter" class="text-black">Reporter</option>
-            </select>
-            <form method="post" action="" class="flex flex-col items-center w-full">
-                <input type="text" name="fName" id="fName" placeholder="First Name" required class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70">
 
-                <input type="text" name="lName" id="lName" placeholder="Last Name" required class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70 mt-3">
-                    
-                <input type="email" name="regEmail" id="regEmail" placeholder="Email" required class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70 mt-3">
-                    
-                <input type="password" name="regPassword" id="regPassword" placeholder="Password" required class="w-3/4 max-w-md h-12 px-3 text-white text-lg rounded-md outline-none bg-gradient-to-b from-[#731919] to-[#e52b2b] placeholder-white/70 mt-3">
-
-                <button id="registerButton" type="submit" class="w-3/4 max-w-md h-12 rounded-md text-lg text-white cursor-pointer bg-gradient-to-b from-[#731919] to-[#e52b2b] hover:opacity-90 transition duration-300 border-none mt-3">
-                        Register
-                </button>
-
-            </form>
-
-            <p class="text-sm text-sky-500 font-bold -mb-1.5">
-                Already have an account? 
-                <button id="signInButton" class="font-semibold hover:underline hover:text-gray-700">
-                    Login
-                </button>
-            </p>
-
+        <div class="form-group">
+          <input type="email" id="loginEmail" class="form-input" placeholder="Email" required/>
         </div>
-        </div> 
 
-        <!-- Hills Effect -->
-        <div class="relative w-full h-64">
-            <svg viewBox="0 0 1440 320" class="wave absolute left-0 w-full h-full">
-                <defs>
-                <linearGradient id="fadeGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#fa4e1d" stop-opacity="1" />
-                    <stop offset="100%" stop-color="#fa4e1d" stop-opacity="0" />
-                </linearGradient>
-                </defs>
-
-                <path fill="url(#fadeGradient)" d="M0,160 
-                C 240,80 480,240 720,160 
-                C 960,80 1200,240 1440,160 
-                L1440,320 L0,320 Z"></path>
-            </svg>
+        <div class="form-group">
+          <input type="password" id="loginPassword" class="form-input" placeholder="Password" required/>
         </div>
+
+        <div class="button-container">
+          <button class="action-button" onclick="handleLogin()">Login</button>
+        </div>
+
+        <div class="switch-text">
+          Don’t have an account? <span onclick="showSignup()">Sign up</span>
+        </div>
+
+        <p id="error-message" class="errorMessage"></p>
+
+      </div>
+
+      <!-- SIGN-UP FORM -->
+      <form class="form-card" id="signupForm" onsubmit="event.preventDefault(); handleSignup();">
+        <div class="logo-container">
+          <img src="/assets/images/uelogo.png" alt="University Logo" class="logo-img" />
+        </div>
+
+        <div class="form-group">
+          <select id="signupRole" class="form-select" required>
+            <option value="" disabled selected>Select Role</option>
+            <option value="complainant">Complainant</option>
+            <option value="maintenance personnel">Maintenance Personnel</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <input type="text" id="firstName" class="form-input" placeholder="First Name" required/>
+        </div>
+
+        <div class="form-group">
+          <input type="text" id="lastName" class="form-input" placeholder="Last Name" required/>
+        </div>
+
+        <div class="form-group">
+          <input type="email" id="signupEmail" class="form-input" placeholder="Email" required/>
+        </div>
+
+        <div class="form-group">
+          <input type="password" id="signupPassword" class="form-input" placeholder="Password" required/>
+        </div>
+
+        <div class="button-container">
+          <button class="action-button" onclick="handleSignup()">Register</button>
+        </div>
+
+        <div class="switch-text">
+          Already have an account? <span onclick="showLogin()">Login</span>
+        </div>
+      </form>
     </div>
-    
-    <script src="assets/js/script.js"></script>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <script src="assets/js/script.js"></script>
 </body>
 </html>
