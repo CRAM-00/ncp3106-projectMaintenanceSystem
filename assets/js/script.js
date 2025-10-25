@@ -84,109 +84,137 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // NAVBAR
-  if (navbarContainer) {
-    fetch('includes/navbar.html')
-      .then(res => res.text())
-      .then(data => {
-        navbarContainer.innerHTML = data;
+if (navbarContainer) {
+  fetch("includes/navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      navbarContainer.innerHTML = data;
 
-        // DESKTOP & MOBILE TOGGLES
-        const darkToggleDesktop = document.getElementById("darkModeToggle");
-        const darkToggleMobile = document.getElementById("darkModeToggleMobile");
-        const sliderCircleDesktop = document.getElementById("sliderCircle");
-        const sliderCircleMobile = document.querySelector('#mobile-menu span span');
+      const page = body.dataset.page;
+      const dashboardNav = document.getElementById("dashboard-nav");
+      const adminNav = document.getElementById("admin-nav");
 
-        // MOBILE MENU
-        const menuBtn = document.getElementById("menu-btn");
-        const mobileMenu = document.getElementById("mobile-menu");
+      // Show navbar based on page
+      if (page === "dashboard") {
+        dashboardNav.classList.remove("hidden");
+        setupDarkMode("dashboard");
+        setupMobileMenu();
+      } else if (page === "admin") {
+        adminNav.classList.remove("hidden");
+        setupDarkMode("admin");
+      }
+    })
+    .catch(err => console.error("Error loading navbar:", err));
+}
 
-        // DARK MODE FUNCTION
-        function setDarkMode(isDark) {
-          if (isDark) {
-            body.classList.add("dark-mode");
-            body.classList.remove("light-mode");
-            if (sliderCircleDesktop) sliderCircleDesktop.textContent = "🌙";
-            if (sliderCircleMobile) sliderCircleMobile.textContent = "🌙";
-          } else {
-            body.classList.add("light-mode");
-            body.classList.remove("dark-mode");
-            if (sliderCircleDesktop) sliderCircleDesktop.textContent = "☀️";
-            if (sliderCircleMobile) sliderCircleMobile.textContent = "☀️";
-          }
-        }
+// --- DARK MODE FUNCTION PER PAGE ---
+function setupDarkMode(pageType) {
+  let darkKey, darkToggleDesktop, sliderCircleDesktop, darkToggleMobile, sliderCircleMobile;
 
-        if (darkToggleDesktop) {
-          darkToggleDesktop.addEventListener("change", e => {
-            setDarkMode(e.target.checked);
-            if (darkToggleMobile) darkToggleMobile.checked = e.target.checked;
-            localStorage.setItem('darkMode', e.target.checked);
-          });
-        }
-
-        if (darkToggleMobile) {
-          darkToggleMobile.addEventListener("change", e => {
-            setDarkMode(e.target.checked);
-            if (darkToggleDesktop) darkToggleDesktop.checked = e.target.checked;
-            localStorage.setItem('darkMode', e.target.checked);
-          });
-        }
-
-        // MOBILE MENU TOGGLE WITH SLIDE
-        if (menuBtn && mobileMenu) {
-          menuBtn.addEventListener("click", () => {
-            if (mobileMenu.classList.contains("show")) {
-
-              const height = mobileMenu.scrollHeight;
-              mobileMenu.style.height = height + "px";
-              mobileMenu.style.paddingTop = "12px";
-              mobileMenu.style.paddingBottom = "12px";
-
-              requestAnimationFrame(() => {
-                mobileMenu.style.height = "0";
-                mobileMenu.style.paddingTop = "0";
-                mobileMenu.style.paddingBottom = "0";
-              });
-
-              mobileMenu.addEventListener(
-                "transitionend",
-                () => {
-                  mobileMenu.classList.remove("show");
-                  mobileMenu.style.height = "";
-                },
-                { once: true }
-              );
-            } else {
-              mobileMenu.classList.add("show");
-              const height = mobileMenu.scrollHeight + "px";
-
-              mobileMenu.style.height = "0";
-              mobileMenu.style.paddingTop = "0";
-              mobileMenu.style.paddingBottom = "0";
-
-              requestAnimationFrame(() => {
-                mobileMenu.style.height = height;
-                mobileMenu.style.paddingTop = "12px";
-                mobileMenu.style.paddingBottom = "12px";
-              });
-
-              mobileMenu.addEventListener(
-                "transitionend",
-                () => {
-                  mobileMenu.style.height = ""
-                },
-                { once: true }
-              );
-            }
-          });
-        }
-
-        const darkModePref = localStorage.getItem('darkMode') === 'true';
-        if (darkToggleDesktop) darkToggleDesktop.checked = darkModePref;
-        if (darkToggleMobile) darkToggleMobile.checked = darkModePref;
-        setDarkMode(darkModePref);
-      })
-      .catch(err => console.error("Error loading navbar:", err));
+  if (pageType === "dashboard") {
+    darkKey = "darkMode_dashboard";
+    darkToggleDesktop = document.getElementById("darkModeToggleDashboard");
+    sliderCircleDesktop = document.getElementById("sliderCircleDashboard");
+    darkToggleMobile = document.getElementById("darkModeToggleMobile");
+    sliderCircleMobile = document.getElementById("sliderCircleMobile");
+  } else if (pageType === "admin") {
+    darkKey = "darkMode_admin";
+    darkToggleDesktop = document.getElementById("darkModeToggleAdmin");
+    sliderCircleDesktop = document.getElementById("sliderCircleAdmin");
   }
+
+function setDarkMode(isDark) {
+  if (isDark) {
+    body.classList.add("dark-mode");
+    body.classList.remove("light-mode");
+
+    if (sliderCircleDesktop) {
+      sliderCircleDesktop.textContent = "🌙";
+      sliderCircleDesktop.classList.add("translate-x-6"); 
+      sliderCircleDesktop.classList.remove("translate-x-0");
+    }
+
+    if (sliderCircleMobile) {
+      sliderCircleMobile.textContent = "🌙";
+      sliderCircleMobile.classList.add("translate-x-6");
+      sliderCircleMobile.classList.remove("translate-x-0");
+    }
+
+  } else {
+    body.classList.add("light-mode");
+    body.classList.remove("dark-mode");
+
+    if (sliderCircleDesktop) {
+      sliderCircleDesktop.textContent = "☀️";
+      sliderCircleDesktop.classList.add("translate-x-0");
+      sliderCircleDesktop.classList.remove("translate-x-6");
+    }
+
+    if (sliderCircleMobile) {
+      sliderCircleMobile.textContent = "☀️";
+      sliderCircleMobile.classList.add("translate-x-0");
+      sliderCircleMobile.classList.remove("translate-x-6");
+    }
+  }
+}
+
+  const savedDark = localStorage.getItem(darkKey) === "true";
+  setDarkMode(savedDark);
+  if (darkToggleDesktop) darkToggleDesktop.checked = savedDark;
+  if (darkToggleMobile) darkToggleMobile.checked = savedDark;
+
+  // Desktop toggle event
+  if (darkToggleDesktop) {
+    darkToggleDesktop.addEventListener("change", e => {
+      const isDark = e.target.checked;
+      setDarkMode(isDark);
+      localStorage.setItem(darkKey, isDark);
+      if (darkToggleMobile) darkToggleMobile.checked = isDark;
+    });
+  }
+
+  // Mobile toggle event (only dashboard)
+  if (darkToggleMobile) {
+    darkToggleMobile.addEventListener("change", e => {
+      const isDark = e.target.checked;
+      setDarkMode(isDark);
+      localStorage.setItem(darkKey, isDark);
+      if (darkToggleDesktop) darkToggleDesktop.checked = isDark;
+    });
+  }
+}
+
+// --- MOBILE MENU FUNCTION ---
+function setupMobileMenu() {
+  const menuBtn = document.getElementById("menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  if (!menuBtn || !mobileMenu) return;
+
+  menuBtn.addEventListener("click", () => {
+    if (mobileMenu.classList.contains("show")) {
+      const height = mobileMenu.scrollHeight;
+      mobileMenu.style.height = height + "px";
+      requestAnimationFrame(() => {
+        mobileMenu.style.height = "0";
+      });
+      mobileMenu.addEventListener("transitionend", () => {
+        mobileMenu.classList.remove("show");
+        mobileMenu.style.height = "";
+      }, { once: true });
+    } else {
+      mobileMenu.classList.add("show");
+      const height = mobileMenu.scrollHeight + "px";
+      mobileMenu.style.height = "0";
+      requestAnimationFrame(() => {
+        mobileMenu.style.height = height;
+      });
+      mobileMenu.addEventListener("transitionend", () => {
+        mobileMenu.style.height = "";
+      }, { once: true });
+    }
+  });
+}
 
   //FOOTER
 if (footerContainer) {

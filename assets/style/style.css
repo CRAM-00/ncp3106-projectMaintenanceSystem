@@ -7,8 +7,8 @@
 
 body {
     font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-    overflow-x: hidden; /* prevents horizontal scroll, but allows vertical */
-    height: auto;       /* let the body expand with content */
+    overflow-x: hidden; 
+    height: auto;      
     transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -435,7 +435,7 @@ header {
 
 #mobile-menu {
     display: block; 
-    max-height: 0; 
+    max-height: 0;
     overflow: hidden;
     background-color: #b91c1c;
     padding: 0 16px;
