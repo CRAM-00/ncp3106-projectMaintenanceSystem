@@ -12,6 +12,7 @@ body {
     transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* DARK MODE */
 .light-mode {
     background: linear-gradient(90deg, #a6a6a6, #ffffff);
     color: black;
@@ -24,6 +25,12 @@ body {
 
 .slider-circle {
     transition: transform 0.4s ease, background-color 0.4s ease;
+}
+
+body.dark-mode #dashboard-nav label > span,
+body.dark-mode #admin-nav label > span,
+body.dark-mode #mobile-menu label > span {
+  background-color: #374151 !important; /* Tailwind gray-700 */
 }
 
 /* Login & Signup Forms*/
@@ -468,3 +475,5 @@ header {
         display: block;
     }
 }
+
+

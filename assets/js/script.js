@@ -247,4 +247,213 @@ if (footerContainer) {
     .catch(err => console.error('Error loading footer:', err));
 }
 
+  // --- REPORT FORM SUBMISSION (dashboard.html) ---
+  const reportForm = document.getElementById("reportForm");
+  if (reportForm) {
+    reportForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("reportName").value.trim();
+      const title = document.getElementById("reportTitle").value.trim();
+      const desc = document.getElementById("reportDesc").value.trim();
+
+      if (!name || !title || !desc) return alert("Please fill out all fields.");
+
+      // Create a new report object
+      const newReport = {
+        id: Date.now(),
+        name,
+        title,
+        desc,
+        status: "Pending",
+        date: new Date().toLocaleString()
+      };
+
+      // Load existing reports
+      const reports = JSON.parse(localStorage.getItem("maintenanceReports") || "[]");
+      reports.push(newReport);
+      localStorage.setItem("maintenanceReports", JSON.stringify(reports));
+
+      alert("✅ Report submitted successfully!");
+      reportForm.reset();
+    });
+  }
+
+// --- ADMIN PAGE REPORT DISPLAY (admin.html) ---
+// ✅ Now includes real-time live updates when reports are added/edited
+const requestsList = document.getElementById("requestsList");
+
+if (requestsList) {
+  function loadReports() {
+    const reports = JSON.parse(localStorage.getItem("maintenanceReports") || "[]");
+    requestsList.innerHTML = "";
+
+    let pending = 0, inProgress = 0, completed = 0;
+
+    reports.forEach((r) => {
+      if (r.status === "Pending") pending++;
+      else if (r.status === "In Progress") inProgress++;
+      else if (r.status === "Completed") completed++;
+
+      const li = document.createElement("li");
+      li.className = "bg-white text-black p-3 rounded-lg flex justify-between items-center";
+
+      li.innerHTML = `
+        <div>
+          <p class="font-semibold text-red-600">${r.title}</p>
+          <p class="text-sm">${r.desc}</p>
+          <p class="text-xs text-gray-600">Reported by: ${r.name}</p>
+          <p class="text-xs text-gray-500">Date: ${r.date}</p>
+        </div>
+        <select data-id="${r.id}" class="statusSelect border rounded px-2 py-1">
+          <option value="Pending" ${r.status === "Pending" ? "selected" : ""}>Pending</option>
+          <option value="In Progress" ${r.status === "In Progress" ? "selected" : ""}>In Progress</option>
+          <option value="Completed" ${r.status === "Completed" ? "selected" : ""}>Completed</option>
+        </select>
+      `;
+      requestsList.appendChild(li);
+    });
+
+    // Update counts
+    document.getElementById("totalRequests").textContent = reports.length;
+    document.getElementById("pendingCount").textContent = pending;
+    document.getElementById("inProgressCount").textContent = inProgress;
+    document.getElementById("completedCount").textContent = completed;
+
+    // Add event listeners for each dropdown
+    document.querySelectorAll(".statusSelect").forEach(select => {
+      select.addEventListener("change", (e) => {
+        const id = parseInt(e.target.dataset.id);
+        const reports = JSON.parse(localStorage.getItem("maintenanceReports") || "[]");
+        const report = reports.find(r => r.id === id);
+        if (report) report.status = e.target.value;
+        localStorage.setItem("maintenanceReports", JSON.stringify(reports));
+        loadReports(); // Refresh display
+      });
+    });
+  }
+
+  // Initial load
+  loadReports();
+
+  // 🔄 Listen for real-time updates from other tabs (like dashboard.html)
+  window.addEventListener("storage", (event) => {
+    if (event.key === "maintenanceReports") {
+      loadReports();
+    }
+  });
+}
+
+// 🔹 ADMIN PAGE — Add & Manage Announcements
+  const announceList = document.getElementById("announcementList");
+  const announceTitle = document.getElementById("announceTitle");
+  const announceDesc = document.getElementById("announceDesc");
+
+  window.toggleAnnouncementForm = function() {
+    const form = document.getElementById("announcementForm");
+    if (form) form.classList.toggle("hidden");
+  };
+
+  window.addAnnouncement = function() {
+    const title = announceTitle.value.trim();
+    const desc = announceDesc.value.trim();
+
+    if (!title || !desc) return alert("Please fill out all fields!");
+
+    const newAnnouncement = {
+      id: Date.now(),
+      title,
+      desc,
+      date: new Date().toLocaleString()
+    };
+
+    const announcements = JSON.parse(localStorage.getItem("announcements") || "[]");
+    announcements.push(newAnnouncement);
+    localStorage.setItem("announcements", JSON.stringify(announcements));
+
+    announceTitle.value = "";
+    announceDesc.value = "";
+    toggleAnnouncementForm();
+    loadAnnouncementsAdmin();
+  };
+
+  function loadAnnouncementsAdmin() {
+    if (!announceList) return;
+    const announcements = JSON.parse(localStorage.getItem("announcements") || "[]");
+    announceList.innerHTML = "";
+
+    if (announcements.length === 0) {
+      announceList.innerHTML = `<p class="text-sm opacity-80">No announcements yet.</p>`;
+      return;
+    }
+
+    announcements.slice().reverse().forEach(a => {
+      const div = document.createElement("div");
+      div.className = "bg-white text-black p-3 rounded-lg shadow flex justify-between items-start";
+      div.innerHTML = `
+        <div>
+          <h3 class="font-bold text-red-600">${a.title}</h3>
+          <p class="text-sm">${a.desc}</p>
+          <p class="text-xs text-gray-500 mt-1">${a.date}</p>
+        </div>
+        <button class="text-red-600 font-bold hover:text-red-800" data-id="${a.id}">✕</button>
+      `;
+      announceList.appendChild(div);
+    });
+
+    // Delete button
+    announceList.querySelectorAll("button").forEach(btn => {
+      btn.addEventListener("click", e => {
+        const id = parseInt(e.target.dataset.id);
+        let announcements = JSON.parse(localStorage.getItem("announcements") || "[]");
+        announcements = announcements.filter(a => a.id !== id);
+        localStorage.setItem("announcements", JSON.stringify(announcements));
+        loadAnnouncementsAdmin();
+      });
+    });
+  }
+
+  if (announceList) loadAnnouncementsAdmin();
+
+// 🔹 DASHBOARD PAGE — Show Announcements (with real-time sync)
+const dashboardAnnouncements = document.getElementById("announcements");
+
+if (dashboardAnnouncements) {
+  function renderAnnouncements() {
+    const announcements = JSON.parse(localStorage.getItem("announcements") || "[]");
+    dashboardAnnouncements.innerHTML = "";
+
+    if (announcements.length === 0) {
+      dashboardAnnouncements.innerHTML = `
+        <div class="w-full sm:w-80 md:w-96 lg:w-[28rem] p-6 bg-white text-gray-900 rounded-2xl shadow">
+          <h2 class="text-xl font-semibold text-red-700 mb-2">No Announcements Yet</h2>
+          <p>Announcements from admin will appear here.</p>
+        </div>
+      `;
+      return;
+    }
+
+    announcements.slice().reverse().forEach(a => {
+      const card = document.createElement("div");
+      card.className = "w-full sm:w-80 md:w-96 lg:w-[28rem] p-6 bg-white text-gray-900 rounded-2xl shadow hover:shadow-lg transition";
+      card.innerHTML = `
+        <h2 class="text-xl font-semibold text-red-700 mb-2">${a.title}</h2>
+        <p>${a.desc}</p>
+        <p class="text-xs text-gray-500 mt-2">Posted on ${a.date}</p>
+      `;
+      dashboardAnnouncements.appendChild(card);
+    });
+  }
+
+  // Initial load
+  renderAnnouncements();
+
+  // Listen for live updates (when admin changes localStorage)
+  window.addEventListener("storage", (event) => {
+    if (event.key === "announcements") {
+      renderAnnouncements();
+    }
+  });
+}
+
 });
