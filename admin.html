@@ -47,7 +47,18 @@
     <section class="grid md:grid-cols-2 gap-8">
       <!-- Maintenance Requests -->
       <div class="bg-[#E43636] text-white rounded-xl shadow-lg p-5">
-        <h2 class="text-lg font-semibold mb-3">Maintenance Requests</h2>
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="text-lg font-semibold">Maintenance Requests</h2>
+
+          <!-- Filter Dropdown -->
+          <select id="statusFilter" class="px-3 py-1.5 rounded bg-white text-[#E43636] font-semibold focus:outline-none">
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+
         <ul id="requestsList" class="space-y-3 overflow-y-auto max-h-96"></ul>
       </div>
 
@@ -71,7 +82,7 @@
             <button onclick="addAnnouncement()"
               class="bg-white text-[#E43636] px-3 py-1 rounded font-semibold hover:bg-gray-200">Add</button>
             <button onclick="toggleAnnouncementForm()"
-              class="bg-gray-300 text-black px-3 py-1 rounded font-semibold hover:bg-gray-400">Cancel</button>
+              class="bg-white text-[#E43636] px-3 py-1 rounded font-semibold hover:bg-gray-200">Cancel</button>
           </div>
         </div>
 
