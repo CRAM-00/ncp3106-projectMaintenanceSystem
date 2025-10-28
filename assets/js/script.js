@@ -124,28 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (page === "admin") {
           adminNav.classList.remove("hidden")
           setupDarkMode("admin")
-
-          const trashBtn = document.getElementById("trash-btn")
-          const trashDropdown = document.getElementById("trash-dropdown")
-
-          document.addEventListener("click", (e) => {
-            if (trashDropdown && !trashBtn.contains(e.target) && !trashDropdown.contains(e.target)) {
-              trashDropdown.classList.add("hidden")
-            }
-
-            const notifDropdown = document.getElementById("notif-dropdown")
-            const notifBtn = document.getElementById("notif-btn")
-
-            if (notifDropdown && !notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
-              notifDropdown.classList.add("hidden")
-            }
-          })
-
-          if (trashBtn && trashDropdown) {
-            trashBtn.addEventListener("click", () => {
-              trashDropdown.classList.toggle("hidden")
-            })
-          }
+          
 
           // ======================= ADMIN NOTIFICATIONS =======================
           const notifBtn = document.getElementById("notif-btn")
@@ -223,115 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((err) => console.error("Error loading navbar:", err))
   }
 
-  function loadTrash() {
-    const trashList = document.getElementById("trash-list")
-    const trashCount = document.getElementById("trash-count")
-    const trashReports = JSON.parse(localStorage.getItem("trashReports") || "[]")
 
-    if (!trashList || !trashCount) return
-
-    trashList.innerHTML = ""
-
-    if (trashReports.length === 0) {
-      trashCount.classList.add("hidden")
-      trashList.innerHTML = `<li class="p-3 text-sm text-gray-500">Trash is empty</li>`
-      return
-    }
-
-    trashCount.textContent = trashReports.length
-    trashCount.classList.remove("hidden")
-
-    trashReports
-      .slice()
-      .reverse()
-      .forEach((r, index) => {
-        const li = document.createElement("li")
-        li.className = "p-3 hover:bg-gray-100 transition flex justify-between items-start"
-
-        li.innerHTML = `
-      <div>
-        <p class="font-semibold text-red-600">${r.title}</p>
-        <p class="text-sm text-gray-700">${r.desc}</p>
-        <p class="text-xs text-gray-500 mt-1">By ${r.name} • ${r.date}</p>
-      </div>
-      <button class="restore-btn bg-green-500 text-white px-2 py-1 rounded ml-2 text-xs" data-index="${index}">Restore</button>
-    `
-
-        trashList.appendChild(li)
-      })
-
-    // Add event listeners for restore buttons
-    document.querySelectorAll(".restore-btn").forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        const idx = Number.parseInt(e.target.dataset.index)
-        restoreTrashItem(idx)
-      })
-    })
-  }
-
-  function restoreTrashItem(index) {
-    const trashReports = JSON.parse(localStorage.getItem("trashReports") || "[]")
-    const maintenanceReports = JSON.parse(localStorage.getItem("maintenanceReports") || "[]")
-
-    const restoredItem = trashReports.splice(index, 1)[0] // remove from trash
-    maintenanceReports.push(restoredItem) // add to maintenance reports
-
-    localStorage.setItem("trashReports", JSON.stringify(trashReports))
-    localStorage.setItem("maintenanceReports", JSON.stringify(maintenanceReports))
-
-    loadTrash() // refresh trash dropdown
-    window.loadReports() // refresh maintenance requests
-
-    setTimeout(() => {
-      // Find the maintenance requests container by looking for the heading
-      const mainSection = document.querySelector("main")
-      if (mainSection) {
-        // Find the grid container with the maintenance requests panel
-        const gridSection = mainSection.querySelector("section.grid")
-        if (gridSection) {
-          // Get the first child div (Maintenance Requests panel)
-          const maintenancePanel = gridSection.querySelector("div.bg-\\[\\#E43636\\]")
-          if (maintenancePanel) {
-            // Scroll to the maintenance requests panel
-            maintenancePanel.scrollIntoView({ behavior: "smooth", block: "start" })
-          }
-        }
-      }
-
-      // Find and highlight the last item (the restored one)
-      const requestsList = document.getElementById("requestsList")
-      if (requestsList) {
-        const items = requestsList.querySelectorAll("li")
-        if (items.length > 0) {
-          const lastItem = items[items.length - 1]
-          lastItem.style.backgroundColor = "#FFE5E5" // Light red highlight
-          lastItem.style.transition = "background-color 0.3s ease"
-
-          // Remove highlight after 3 seconds
-          setTimeout(() => {
-            lastItem.style.backgroundColor = ""
-          }, 3000)
-        }
-      }
-    }, 300)
-  }
-
-  const restoreAllBtn = document.getElementById("restore-all-btn")
-  if (restoreAllBtn) {
-    restoreAllBtn.addEventListener("click", () => {
-      const trashReports = JSON.parse(localStorage.getItem("trashReports") || "[]")
-      if (trashReports.length === 0) return
-
-      const maintenanceReports = JSON.parse(localStorage.getItem("maintenanceReports") || "[]")
-      const newMaintenance = [...maintenanceReports, ...trashReports]
-
-      localStorage.setItem("maintenanceReports", JSON.stringify(newMaintenance))
-      localStorage.setItem("trashReports", JSON.stringify([])) // clear trash
-
-      loadTrash()
-      window.loadReports() // refresh maintenance requests
-    })
-  }
 
   // DARK MODE
   function setupDarkMode(pageType) {
@@ -571,76 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
       })
 
-      // 🕒 AUTO-REMOVE OLD REPORTS (older than 7 days) + TOAST NOTIFICATION
-      function showToast(message) {
-        // Remove existing toast if any
-        const existingToast = document.getElementById("toast-message")
-        if (existingToast) existingToast.remove()
-
-        // Create toast element
-        const toast = document.createElement("div")
-        toast.id = "toast-message"
-        toast.textContent = message
-
-        // Style it (Tailwind-friendly)
-        toast.className =
-          "fixed bottom-5 right-5 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm opacity-0 transition-opacity duration-500 z-50"
-
-        document.body.appendChild(toast)
-
-        // Fade in
-        setTimeout(() => {
-          toast.style.opacity = "1"
-        }, 100)
-
-        // Fade out + remove after 3 seconds
-        setTimeout(() => {
-          toast.style.opacity = "0"
-          setTimeout(() => toast.remove(), 500)
-        }, 3000)
-      }
-
-      // 🕒 TEST AUTO-REMOVE EVERY 10 SECONDS
-      function autoRemoveOldReportsTest() {
-        const reports = JSON.parse(localStorage.getItem("maintenanceReports") || "[]")
-        const now = new Date()
-
-        // For testing: remove reports older than 10 seconds
-        const freshReports = []
-        const removedReports = []
-
-        reports.forEach((r) => {
-          const reportDate = new Date(r.date)
-          const ageSeconds = (now - reportDate) / 1000
-          if (ageSeconds < 10) {
-            freshReports.push(r)
-          } else {
-            removedReports.push(r)
-          }
-        })
-
-        if (removedReports.length > 0) {
-          // Save removed reports to trash
-          const trash = JSON.parse(localStorage.getItem("trashReports") || "[]")
-          const newTrash = [...trash, ...removedReports]
-          localStorage.setItem("trashReports", JSON.stringify(newTrash))
-
-          // Update maintenanceReports
-          localStorage.setItem("maintenanceReports", JSON.stringify(freshReports))
-          window.loadReports() // Call loadReports function
-
-          showToast(`🗑️ ${removedReports.length} old report${removedReports.length > 1 ? "s" : ""} moved to Trash`)
-          loadTrash() // refresh trash dropdown
-        }
-      }
-
-      // Run every 1 second for rapid testing
-      setInterval(autoRemoveOldReportsTest, 1000)
-
-      // Also check once immediately
-      autoRemoveOldReportsTest()
-
-      // ✅ FILTER FUNCTIONALITY
+      // FILTER FUNCTIONALITY
       const statusFilter = document.getElementById("statusFilter")
       if (statusFilter) {
         statusFilter.addEventListener("change", () => {
