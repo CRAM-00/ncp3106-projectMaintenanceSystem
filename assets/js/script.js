@@ -126,19 +126,19 @@ document.addEventListener("DOMContentLoaded", () => {
           setupDarkMode("admin")
           
 
-          // ======================= ADMIN NOTIFICATIONS =======================
+          //ADMIN NOTIFICATIONS 
           const notifBtn = document.getElementById("notif-btn")
           const notifDropdown = document.getElementById("notif-dropdown")
           const notifCount = document.getElementById("notif-count")
           const notifList = document.getElementById("notif-list")
 
           if (notifBtn && notifDropdown && notifList) {
-            // --- Toggle dropdown visibility ---
+            //  Toggle dropdown visibility 
             notifBtn.addEventListener("click", () => {
               notifDropdown.classList.toggle("hidden")
             })
 
-            // --- Function to refresh notifications ---
+            //  Function to refresh notifications 
             function loadNotifications() {
               const reports = JSON.parse(localStorage.getItem("maintenanceReports") || "[]")
               notifList.innerHTML = ""
@@ -184,15 +184,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 })
             }
 
-            // ✅ Initial load when page opens
             loadNotifications()
 
-            // ✅ Real-time updates when data changes (e.g., another page modifies localStorage)
             window.addEventListener("storage", (e) => {
               if (e.key === "maintenanceReports") loadNotifications()
             })
 
-            // ✅ Live check every 2 seconds (ensures real-time UI sync even in same tab)
+          
             setInterval(() => {
               loadNotifications()
             }, 100)
@@ -361,17 +359,22 @@ document.addEventListener("DOMContentLoaded", () => {
     reportForm.addEventListener("submit", (e) => {
       e.preventDefault()
 
-      const name = document.getElementById("reportName").value.trim()
       const title = document.getElementById("reportTitle").value.trim()
+      const bldg  = document.getElementById("reportBldg").value.trim()
+      const room = document.getElementById("reportRoom").value.trim()
       const desc = document.getElementById("reportDesc").value.trim()
 
-      if (!name || !title || !desc) return alert("Please fill out all fields.")
+      if (!title || !bldg || !room || !desc) {
+        alert("Please fill out all fields!")
+        return
+      }
 
       // Create a new report object
       const newReport = {
         id: Date.now(),
-        name,
         title,
+        bldg,
+        room,
         desc,
         status: "Pending",
         date: new Date().toLocaleString(),
@@ -411,6 +414,8 @@ document.addEventListener("DOMContentLoaded", () => {
         li.innerHTML = `
         <div>
           <p class="font-semibold text-red-600">${r.title}</p>
+          <p class="text-sm">Bldg Name : ${r.bldg}</p>
+          <p class="text-sm">Room No. : ${r.room}</p>
           <p class="text-sm">${r.desc}</p>
           <p class="text-xs text-gray-600">Reported by: ${r.name}</p>
           <p class="text-xs text-gray-500">Date: ${r.date}</p>

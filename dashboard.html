@@ -36,11 +36,14 @@
   <section id="services" class="pt-24 px-6">
     <h1 class="text-4xl font-bold text-center mb-6">🛠 Report a Problem</h1>
     <form id="reportForm" class="card max-w-xl mx-auto bg-white text-gray-900 p-6 rounded-2xl shadow">
-      <label class="block mb-2 font-semibold">Your Name</label>
-      <input id="reportName" type="text" class="w-full border rounded-lg p-2 mb-4 text-black" placeholder="Enter your name" required>
-
       <label class="block mb-2 font-semibold">Problem Title</label>
       <input id="reportTitle" type="text" class="w-full border rounded-lg p-2 mb-4 text-black" placeholder="Short description" required>
+      
+      <label class="block mb-2 font-semibold">Bldg Name</label>
+      <input id="reportBldg" type="text" class="w-full border rounded-lg p-2 mb-4 text-black" placeholder="Enter your Bldg" required>
+
+      <label class="block mb-2 font-semibold">Room no.</label>
+      <input id="reportRoom" type="number" class="w-full border rounded-lg p-2 mb-4 text-black" placeholder="Enter your Room" required>
 
       <label class="block mb-2 font-semibold">Problem Description</label>
       <textarea id="reportDesc" class="w-full border rounded-lg p-2 mb-4 text-black" rows="4" placeholder="Describe the issue" required></textarea>
