@@ -7,50 +7,50 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="assets/style/style.css">
 </head>
-
 <body data-page="dashboard" class="light-mode transition-colors duration-500 font-sans">
-
 
   <!-- Background -->
   <img src="assets/images/uelogo.png" 
        alt="UE Logo" 
        class="absolute inset-0 w-full h-full object-cover opacity-10 -z-10">
 
-  <!-- Announcements Section -->
-  <section id="home" class="pt-24 px-6 flex flex-col items-center">
-    <h1 class="text-4xl font-bold text-center mb-6">📢 Announcements</h1>
-    <div id="announcements" class="flex flex-wrap justify-center gap-6 max-w-6xl">
-      <div class="card0 w-full sm:w-80 md:w-96 lg:w-[28rem] p-6 bg-white  text-gray-900 rounded-2xl shadow hover:shadow-lg transition">
+  <!-- DASHBOARD CONTENT: Fully Responsive 2-column -->
+<section id="dashboard-content" class="pt-24 px-4 sm:px-6 md:px-8 lg:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-center gap-6 overflow-x-hidden">
+
+
+  <div id="announcements-section" class="flex flex-col w-full">
+    <h1 class="text-4xl font-bold mb-6 text-center w-full">📢 Announcements</h1>
+    
+    <!-- Announcement Cards -->
+    <div id="announcements" class="flex flex-col gap-6 w-full">
+      <div class="bg-white text-gray-900 p-6 rounded-2xl shadow flex flex-col gap-4 w-full hover:shadow-lg transition">
         <h2 class="text-xl font-semibold text-red-700 mb-2">System Maintenance Notice</h2>
-        <p>There will be scheduled maintenance on October 20. Please save your work ahead of time.</p>
-      </div>
-      <div class="card w-full sm:w-80 md:w-96 lg:w-[28rem] p-6 bg-white text-gray-900 rounded-2xl shadow hover:shadow-lg transition">
-        <h2 class="text-xl font-semibold text-red-700 mb-2">Network Upgrade</h2>
-        <p>Improved Wi-Fi service will be deployed in all labs next week.</p>
       </div>
     </div>
-  </section>
+  </div>
 
 
-  <!-- Maintenance Report Section -->
-  <section id="services" class="pt-24 px-6">
-    <h1 class="text-4xl font-bold text-center mb-6">🛠 Report a Problem</h1>
-    <form id="reportForm" class="card max-w-xl mx-auto bg-white text-gray-900 p-6 rounded-2xl shadow">
-      <label class="block mb-2 font-semibold">Problem Title</label>
-      <input id="reportTitle" type="text" class="w-full border rounded-lg p-2 mb-4 text-black" placeholder="Short description" required>
-      
-      <label class="block mb-2 font-semibold">Bldg Name</label>
-      <input id="reportBldg" type="text" class="w-full border rounded-lg p-2 mb-4 text-black" placeholder="Enter your Bldg" required>
+  <!-- Right Column: Report a Problem -->
+  <div id="report-section" class="w-full">
+    <h1 class="text-4xl font-bold mb-6 text-center w-full">🛠 Report a Problem</h1>
+    <form id="reportForm" class="bg-white text-gray-900 p-6 rounded-2xl shadow flex flex-col gap-4 w-full">
+      <label class="font-semibold">Problem Title</label>
+      <input id="reportTitle" type="text" class="w-full border rounded-lg p-2 text-black" placeholder="Short description" required>
 
-      <label class="block mb-2 font-semibold">Room no.</label>
-      <input id="reportRoom" type="number" class="w-full border rounded-lg p-2 mb-4 text-black" placeholder="Enter your Room" required>
+      <label class="font-semibold">Bldg Name</label>
+      <input id="reportBldg" type="text" class="w-full border rounded-lg p-2 text-black" placeholder="Enter your Bldg" required>
 
-      <label class="block mb-2 font-semibold">Problem Description</label>
-      <textarea id="reportDesc" class="w-full border rounded-lg p-2 mb-4 text-black" rows="4" placeholder="Describe the issue" required></textarea>
+      <label class="font-semibold">Room no.</label>
+      <input id="reportRoom" type="number" class="w-full border rounded-lg p-2 text-black" placeholder="Enter your Room" required>
+
+      <label class="font-semibold">Problem Description</label>
+      <textarea id="reportDesc" class="w-full border rounded-lg p-2 text-black" rows="4" placeholder="Describe the issue" required></textarea>
 
       <button type="submit" class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition">Submit Report</button>
     </form>
-  </section>
+  </div>
+
+</section>
 
 
   <!-- About IT Department -->
@@ -63,7 +63,7 @@
       </p>
     </div>
   </section>
-  
+
   <!-- NAVBAR -->
   <div id="navbar-container"></div>
 
@@ -71,6 +71,5 @@
   <div id="footer-container"></div>
 
   <script src="assets/js/script.js"></script>
-
 </body>
 </html>

@@ -177,6 +177,12 @@ body.dark-mode #mobile-menu label > span {
 }
 
 /* DASHBOARD / ADMIN */
+#announcements {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+
 .dark-mode .card,
 .dark-mode .card0 {
     background-color: #1e1e1e;
