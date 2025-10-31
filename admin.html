@@ -19,9 +19,10 @@
 
   <!-- MAIN CONTENT -->
   <main class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-    <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 mb-10">
-      Maintenance Dashboard
-    </h1>
+     <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 dark:text-white mb-10">
+  Maintenance Dashboard
+</h1>
+
 
     <!-- DASHBOARD STATS -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -29,15 +30,15 @@
         <h2 id="totalRequests" class="text-3xl font-bold">0</h2>
         <p class="text-lg">Total Requests</p>
       </div>
-      <div class="bg-[#E43636] text-white rounded-xl shadow-md p-4 text-center">
+      <div class="bg-[#EAB308] text-white rounded-xl shadow-md p-4 text-center">
         <h2 id="pendingCount" class="text-3xl font-bold">0</h2>
         <p class="text-lg">Pending</p>
       </div>
-      <div class="bg-[#E43636] text-white rounded-xl shadow-md p-4 text-center">
+      <div class="bg-[#3B82F6] text-white rounded-xl shadow-md p-4 text-center">
         <h2 id="inProgressCount" class="text-3xl font-bold">0</h2>
         <p class="text-lg">In Progress</p>
       </div>
-      <div class="bg-[#E43636] text-white rounded-xl shadow-md p-4 text-center">
+      <div class="bg-[#22C55E] text-white rounded-xl shadow-md p-4 text-center">
         <h2 id="completedCount" class="text-3xl font-bold">0</h2>
         <p class="text-lg">Completed</p>
       </div>
@@ -46,7 +47,7 @@
     <!-- MAIN PANELS -->
     <section class="grid md:grid-cols-2 gap-8">
       <!-- Maintenance Requests -->
-      <div class="bg-[#E43636] text-white rounded-xl shadow-lg p-5">
+      <div class="bg-[#C12F2F] text-white rounded-xl shadow-lg p-5">
         <div class="flex justify-between items-center mb-3">
           <h2 class="text-lg font-semibold">Maintenance Requests</h2>
 
@@ -63,7 +64,7 @@
       </div>
 
       <!-- Announcements -->
-      <div class="bg-[#E43636] text-white rounded-xl shadow-lg p-5">
+      <div class="bg-[#C12F2F] text-white rounded-xl shadow-lg p-5">
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-lg font-semibold">Announcements</h2>
           <button onclick="toggleAnnouncementForm()"
@@ -73,18 +74,20 @@
         </div>
 
         <!-- Announcement Form -->
-        <div id="announcementForm" class="hidden mb-4 bg-white/20 p-3 rounded">
+        <form id="announcementForm" class="hidden mb-4 bg-white/20 p-3 rounded" onsubmit="addAnnouncement(event)">
           <input id="announceTitle" type="text" placeholder="Title"
-            class="w-full mb-2 px-2 py-1 text-black rounded">
+            class="w-full mb-2 px-2 py-1 text-black rounded" required>
           <textarea id="announceDesc" rows="2" placeholder="Description"
-            class="w-full px-2 py-1 text-black rounded"></textarea>
+            class="w-full px-2 py-1 text-black rounded" required></textarea>
           <div class="flex justify-end mt-2 gap-2">
-            <button onclick="addAnnouncement()"
-              class="bg-white text-[#E43636] px-3 py-1 rounded font-semibold hover:bg-gray-200">Add</button>
-            <button onclick="toggleAnnouncementForm()"
-              class="bg-white text-[#E43636] px-3 py-1 rounded font-semibold hover:bg-gray-200">Cancel</button>
-          </div>
-        </div>
+  <button type="button" onclick="addAnnouncement()"
+    class="bg-white text-[#E43636] px-3 py-1 rounded font-semibold hover:bg-gray-200">Add</button>
+  <button type="button" onclick="toggleAnnouncementForm()"
+    class="bg-white text-[#E43636] px-3 py-1 rounded font-semibold hover:bg-gray-200">Cancel</button>
+</div>
+        </form>
+
+
 
         <div id="announcementList" class="space-y-3"></div>
       </div>

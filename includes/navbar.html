@@ -1,17 +1,15 @@
-<!-- DASHBOARD NAVBAR -->
-<nav id="dashboard-nav" class="hidden fixed top-0 left-0 w-full bg-red-600/90 backdrop-blur-md shadow-md z-50">
+<!-- DASHBOARD NAVBAR (Desktop Only) -->
+<nav id="dashboard-nav" class="fixed top-0 left-0 w-full bg-red-600/95 backdrop-blur-md shadow-md z-50">
   <div class="mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16 w-full">
-      <a href="#" class="text-white text-xl font-bold">University of the East</a>
+      <!-- University Title -->
+      <a href="#" class="text-white text-xl font-bold">University of the East - Manila</a>
 
-      <!-- Desktop Menu -->
-      <div class="hidden md:flex items-center space-x-6 ml-auto text-white">
-        <a href="#home">Home</a>
-        <a href="#services">Service Report</a>
-        <a href="#about">About</a>
-
+      <!-- Right Side: Dark Mode + Logout -->
+      <div class="flex items-center space-x-6 text-white ml-auto">
+        
         <!-- Dark Mode Toggle -->
-        <label class="relative inline-block w-14 h-8">
+        <label class="relative inline-block w-14 h-8 -ml-1">
           <input type="checkbox" id="darkModeToggleDashboard" class="hidden">
           <span class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
             <span id="sliderCircleDashboard"
@@ -20,44 +18,34 @@
             </span>
           </span>
         </label>
+
+        <!-- Logout Button -->
+        <button id="logoutBtn" title="Log Out"
+          class="p-2 rounded-full bg-white text-red-600 hover:bg-red-100 transition">
+          <!-- Lucide Logout Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+            class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6A2.25 2.25 0 0 0 5.25 5.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+          </svg>
+        </button>
+
       </div>
-
-      <!-- Mobile Menu Button -->
-      <button id="menu-btn" class="md:hidden text-white focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-          viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
     </div>
-  </div>
-
-  <!-- Mobile Dropdown -->
-  <div id="mobile-menu" class="hidden md:hidden bg-red-700 px-4 py-3 space-y-2">
-    <a href="#home" class="block text-white hover:text-red-300">Home</a>
-    <a href="#services" class="block text-white hover:text-red-300">Service Report</a>
-    <a href="#about" class="block text-white hover:text-red-300">About</a>
-
-    <!-- Dark Mode Toggle for Mobile -->
-    <label class="relative inline-block w-14 h-8">
-      <input type="checkbox" id="darkModeToggleMobile" class="hidden">
-      <span class="absolute inset-0 rounded-full bg-yellow-400 transition-colors duration-500 cursor-pointer flex items-center">
-        <span id="sliderCircleMobile"
-              class="flex items-center justify-center w-6 h-6 ml-1 rounded-full shadow-md text-lg transition-transform duration-500">
-          ☀️
-        </span>
-      </span>
-    </label>
   </div>
 </nav>
 
+
+
 <!-- ADMIN NAVBAR -->
-<nav id="admin-nav" class="hidden fixed top-0 left-0 w-full bg-red-600/95 backdrop-blur-sm shadow-lg z-50">
+<nav id="admin-nav" class="fixed top-0 left-0 w-full bg-red-600/95 backdrop-blur-md shadow-md z-50">
   <div class="px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-    <a href="#" class="text-white font-bold text-lg sm:text-xl tracking-wide">
-      University of the East
+    <a href="#" class="text-white font-bold text-lg sm:text-xl ">
+      University of the East - Manila
     </a>
+
+    
 
         <div class="flex items-center space-x-3">
       <!-- Notification Icon -->
@@ -76,7 +64,8 @@
 
         <!-- Notification Dropdown -->
         <div id="notif-dropdown"
-          class="hidden absolute right-0 mt-2 w-72 bg-white text-black rounded-lg shadow-lg overflow-hidden">
+  class="absolute right-0 mt-2 w-72 bg-white text-black rounded-lg shadow-lg overflow-hidden origin-top transform scale-y-0 opacity-0 pointer-events-none transition-all duration-300 ease-out">
+
           <div class="p-3 border-b border-gray-300 font-semibold text-red-600">
             Notifications
           </div>
@@ -94,5 +83,16 @@
         </span>
       </span>
     </label>
+            <!-- Logout Button -->
+        <button id="logoutBtn" title="Log Out"
+          class="p-2 rounded-full bg-white text-red-600 hover:bg-red-100 transition">
+          <!-- Lucide Logout Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+            class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6A2.25 2.25 0 0 0 5.25 5.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+          </svg>
+        </button>
   </div>
 </nav>

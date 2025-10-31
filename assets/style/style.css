@@ -33,6 +33,8 @@ body.dark-mode #mobile-menu label > span {
   background-color: #374151 !important; /* Tailwind gray-700 */
 }
 
+
+
 /* Login & Signup Forms*/
 .container {
     position: relative;
@@ -221,6 +223,17 @@ header {
     font-weight: bold;
 }
 
+/* Light Mode */
+body.light-mode h1 {
+  color: #111827; /* same as text-gray-900 */
+}
+
+/* Dark Mode */
+body.dark-mode h1 {
+  color: white;
+}
+
+
 /* TOGGLE SWITCH */
 .toggle-container {
     position: relative;
@@ -271,6 +284,7 @@ header {
 #darkModeToggleMobile:checked + span {
     background-color: #374151;
 }
+
 
 /* FOOTER */
 .footer {
@@ -431,6 +445,51 @@ header {
         opacity: 1;
     }
 }
+
+/* Camera */
+input[type="file"] {
+  color: black; /* light mode */
+}
+
+body.dark-mode input[type="file"] {
+  color: white; /* dark mode */
+}
+
+/* Optional: style the button */
+input[type="file"]::file-selector-button {
+  background-color: black; /* button bg */
+  color: white;               /* button text */
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+body.dark-mode input[type="file"]::file-selector-button {
+  background-color: white; /* darker red for dark mode */
+  color: black;
+}
+
+.highlight {
+  border: 2px solid #E43636;
+  background-color: #FFF0F0;
+  transition: all 0.3s ease;
+}
+
+#notif-dropdown {
+  transform-origin: top;
+  transform: scaleY(0);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+#notif-dropdown.show {
+  transform: scaleY(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
 
 /*  RESPONSIVE MENU */
 #menu-btn {
