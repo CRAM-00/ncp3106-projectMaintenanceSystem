@@ -2,11 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const body = document.body
   const navbarContainer = document.getElementById("navbar-container")
   const footerContainer = document.getElementById("footer-container")
-
-  // =================== LOGIN / SIGNUP ===================
   const loginForm = document.getElementById("loginForm")
   const signupForm = document.getElementById("signupForm")
 
+  // LOGIN / SIGNUP FORM TOGGLE 
   window.showSignup = () => {
     loginForm?.classList.remove("active")
     setTimeout(() => signupForm?.classList.add("active"), 200)
@@ -17,17 +16,15 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => loginForm?.classList.add("active"), 200)
   }
 
+  // LOGIN HANDLER 
   window.handleLogin = () => {
     const email = document.getElementById("loginEmail")
     const password = document.getElementById("loginPassword")
     const loginButton = loginForm?.querySelector("button")
-    const errorMessage = document.getElementById("error-message")
+    const Swal = window.Swal 
 
-    if (!email?.checkValidity()) {
+    if (!email?.checkValidity() || !password?.checkValidity()) {
       email?.reportValidity()
-      return
-    }
-    if (!password?.checkValidity()) {
       password?.reportValidity()
       return
     }
@@ -36,214 +33,493 @@ document.addEventListener("DOMContentLoaded", () => {
       loginButton.disabled = true
       loginButton.textContent = "Logging in..."
     }
-    if (errorMessage) errorMessage.textContent = ""
 
-    setTimeout(() => {
-      const loginSuccess = false // Replace with real auth logic
-      if (loginSuccess) {
-        window.location.href = "dashboard.html"
-      } else {
-        if (errorMessage) errorMessage.textContent = "Incorrect email or password!"
+    fetch("login.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        loginEmail: email.value,
+        loginPassword: password.value,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "success") {
+          const userName =
+  (data.name && data.name.trim() !== "")
+    ? data.name
+    : ((data.first_name && data.last_name)
+        ? `${data.first_name} ${data.last_name}`
+        : "Unknown");
+
+  const userEmail = email.value.trim().toLowerCase();
+
+
+  const savedPicKey = `profilePic_${userEmail}`;
+  const savedPic = localStorage.getItem(savedPicKey);
+
+
+  localStorage.setItem("currentUserName", userName);
+  localStorage.setItem("currentUserEmail", userEmail);
+  localStorage.setItem("currentUserRole", data.role || "");
+
+
+  if (savedPic) {
+    localStorage.setItem("currentUserProfilePic", savedPic);
+  } else {
+    localStorage.setItem("currentUserProfilePic", "assets/images/unknown.jpg");
+  }
+
+
+
+          Swal.fire({
+            title: "Login Successful!",
+            text: `Welcome back, ${userName}!`,
+            icon: "success",
+            confirmButtonText: "Continue",
+            confirmButtonColor: "#E43636",
+          }).then(() => {
+            if (data.role === "maintenance personnel") {
+              window.location.href = "admin.php"
+            } else if (data.role === "complainant") {
+              window.location.href = "dashboard.php"
+            } else {
+              window.location.href = "index.php"
+            }
+          })
+        } else {
+          Swal.fire({
+            title: "Login Failed",
+            text: data.message || "Invalid email or password.",
+            icon: "error",
+            confirmButtonColor: "#E43636",
+          })
+        }
+      })
+      .catch((err) => {
+        console.error("Login error:", err)
+        Swal.fire({
+          title: "Error",
+          text: "Unable to connect to the server.",
+          icon: "error",
+          confirmButtonColor: "#E43636",
+        })
+      })
+      .finally(() => {
         if (loginButton) {
           loginButton.disabled = false
           loginButton.textContent = "Login"
         }
-      }
-    }, 1000)
-  }
-
-  window.handleSignup = () => {
-    const role = document.getElementById("signupRole")
-    const first = document.getElementById("firstName")
-    const last = document.getElementById("lastName")
-    const email = document.getElementById("signupEmail")
-    const password = document.getElementById("signupPassword")
-    const registerButton = signupForm?.querySelector("button")
-
-    if (
-      !role?.checkValidity() ||
-      !first?.checkValidity() ||
-      !last?.checkValidity() ||
-      !email?.checkValidity() ||
-      !password?.checkValidity()
-    ) {
-      role?.checkValidity() || role?.reportValidity()
-      first?.checkValidity() || first?.reportValidity()
-      last?.checkValidity() || last?.reportValidity()
-      email?.checkValidity() || email?.reportValidity()
-      password?.checkValidity() || password?.reportValidity()
-      return
-    }
-
-    if (registerButton) {
-      registerButton.disabled = true
-      registerButton.textContent = "Registering..."
-    }
-
-    setTimeout(() => {
-      const Swal = window.Swal // Declare the Swal variable
-      Swal.fire({
-        title: "You are now registered!",
-        text: `${first?.value} ${last?.value}, Welcome to UE Maintenance Services!`,
-        icon: "success",
-        confirmButtonText: "Cool!",
-        confirmButtonColor: "#E43636",
-      }).then(() => {
-        window.showLogin()
-        if (registerButton) {
-          registerButton.disabled = false
-          registerButton.textContent = "Register"
-        }
-        if (role) role.value = ""
-        if (first) first.value = ""
-        if (last) last.value = ""
-        if (email) email.value = ""
-        if (password) password.value = ""
       })
-    }, 1000)
   }
 
-  // =================== NAVBAR ===================
-  if (navbarContainer) {
-    fetch("includes/navbar.html")
-      .then((res) => res.text())
-      .then((data) => {
-        navbarContainer.innerHTML = data
+  // SIGNUP HANDLER 
+window.handleSignup = () => {
+  const role = document.getElementById("signupRole");
+  const first = document.getElementById("firstName");
+  const last = document.getElementById("lastName");
+  const email = document.getElementById("signupEmail");
+  const password = document.getElementById("signupPassword");
+  const registerButton = signupForm?.querySelector("button");
+  const Swal = window.Swal;
 
-        const page = body.dataset.page
-        const dashboardNav = document.getElementById("dashboard-nav")
-        const adminNav = document.getElementById("admin-nav")
-
-        if (page === "dashboard") {
-          dashboardNav?.classList.remove("hidden")
-          adminNav?.classList.add("hidden")
-          setupDarkMode("dashboard")
-          setupMobileMenu()
-        } else if (page === "admin") {
-          adminNav?.classList.remove("hidden")
-          dashboardNav?.classList.add("hidden")
-          setupDarkMode("admin")
-          setupNotifications()
-        }
-      })
-      .catch((err) => console.error("Error loading navbar:", err))
+  if (
+    !role?.checkValidity() ||
+    !first?.checkValidity() ||
+    !last?.checkValidity() ||
+    !email?.checkValidity() ||
+    !password?.checkValidity()
+  ) {
+    role?.reportValidity();
+    first?.reportValidity();
+    last?.reportValidity();
+    email?.reportValidity();
+    password?.reportValidity();
+    return;
   }
 
-  // =================== DARK MODE ===================
-  function setupDarkMode(pageType) {
-    let darkKey, darkToggleDesktop, sliderCircleDesktop, darkToggleMobile, sliderCircleMobile
+  if (registerButton) {
+    registerButton.disabled = true;
+    registerButton.textContent = "Registering...";
+  }
 
-    if (pageType === "dashboard") {
-      darkKey = "darkMode_dashboard"
-      darkToggleDesktop = document.getElementById("darkModeToggleDashboard")
-      sliderCircleDesktop = document.getElementById("sliderCircleDashboard")
-      darkToggleMobile = document.getElementById("darkModeToggleMobile")
-      sliderCircleMobile = document.getElementById("sliderCircleMobile")
-    } else if (pageType === "admin") {
-      darkKey = "darkMode_admin"
-      darkToggleDesktop = document.getElementById("darkModeToggleAdmin")
-      sliderCircleDesktop = document.getElementById("sliderCircleAdmin")
-    }
+  fetch("signup.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      signupRole: role.value,
+      firstName: first.value,
+      lastName: last.value,
+      signupEmail: email.value,
+      signupPassword: password.value,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.status === "success") {
+        const fullName = `${data.first_name} ${data.last_name}`;
+        localStorage.setItem("currentUserName", fullName);
+        localStorage.setItem("currentUserRole", data.role);
 
-    function setDarkMode(isDark) {
-      if (isDark) {
-        body.classList.add("dark-mode")
-        body.classList.remove("light-mode")
-        if (sliderCircleDesktop) {
-          sliderCircleDesktop.textContent = "🌙"
-          sliderCircleDesktop.classList.add("translate-x-6")
-          sliderCircleDesktop.classList.remove("translate-x-0")
-        }
-        if (sliderCircleMobile) {
-          sliderCircleMobile.textContent = "🌙"
-          sliderCircleMobile.classList.add("translate-x-6")
-          sliderCircleMobile.classList.remove("translate-x-0")
-        }
+        Swal.fire({
+          title: "Account Created!",
+          text: `${fullName}, Welcome to UE Maintenance Services!`,
+          icon: "success",
+          confirmButtonText: "Cool!",
+          confirmButtonColor: "#E43636",
+        }).then(() => {
+          window.showLogin();
+          if (role) role.value = "";
+          if (first) first.value = "";
+          if (last) last.value = "";
+          if (email) email.value = "";
+          if (password) password.value = "";
+        });
       } else {
-        body.classList.add("light-mode")
-        body.classList.remove("dark-mode")
-        if (sliderCircleDesktop) {
-          sliderCircleDesktop.textContent = "☀️"
-          sliderCircleDesktop.classList.add("translate-x-0")
-          sliderCircleDesktop.classList.remove("translate-x-6")
-        }
-        if (sliderCircleMobile) {
-          sliderCircleMobile.textContent = "☀️"
-          sliderCircleMobile.classList.add("translate-x-0")
-          sliderCircleMobile.classList.remove("translate-x-6")
-        }
-      }
-    }
-
-    const savedDark = localStorage.getItem(darkKey) === "true"
-    setDarkMode(savedDark)
-    if (darkToggleDesktop) darkToggleDesktop.checked = savedDark
-    if (darkToggleMobile) darkToggleMobile.checked = savedDark
-
-    if (darkToggleDesktop) {
-      darkToggleDesktop.addEventListener("change", (e) => {
-        const isDark = e.target.checked
-        setDarkMode(isDark)
-        localStorage.setItem(darkKey, isDark)
-        if (darkToggleMobile) darkToggleMobile.checked = isDark
-      })
-    }
-
-    if (darkToggleMobile) {
-      darkToggleMobile.addEventListener("change", (e) => {
-        const isDark = e.target.checked
-        setDarkMode(isDark)
-        localStorage.setItem(darkKey, isDark)
-        if (darkToggleDesktop) darkToggleDesktop.checked = isDark
-      })
-    }
-  }
-
-  // =================== MOBILE MENU ===================
-  function setupMobileMenu() {
-    const menuBtn = document.getElementById("menu-btn")
-    const mobileMenu = document.getElementById("mobile-menu")
-    if (!menuBtn || !mobileMenu) return
-
-    menuBtn.addEventListener("click", () => {
-      if (mobileMenu.classList.contains("show")) {
-        const height = mobileMenu.scrollHeight
-        mobileMenu.style.height = height + "px"
-        requestAnimationFrame(() => {
-          mobileMenu.style.height = "0"
-        })
-        mobileMenu.addEventListener(
-          "transitionend",
-          () => {
-            mobileMenu.classList.remove("show")
-            mobileMenu.style.height = ""
-          },
-          { once: true },
-        )
-      } else {
-        mobileMenu.classList.add("show")
-        const height = mobileMenu.scrollHeight + "px"
-        mobileMenu.style.height = "0"
-        requestAnimationFrame(() => {
-          mobileMenu.style.height = height
-        })
-        mobileMenu.addEventListener(
-          "transitionend",
-          () => {
-            mobileMenu.style.height = ""
-          },
-          { once: true },
-        )
+        Swal.fire({
+          title: "Signup Failed",
+          text: data.message || "Something went wrong.",
+          icon: "error",
+          confirmButtonColor: "#E43636",
+        });
       }
     })
+    .catch((err) => {
+      console.error("Signup error:", err);
+      Swal.fire({
+        title: "Error",
+        text: "Unable to connect to the server.",
+        icon: "error",
+        confirmButtonColor: "#E43636",
+      });
+    })
+    .finally(() => {
+      if (registerButton) {
+        registerButton.disabled = false;
+        registerButton.textContent = "Register";
+      }
+    });
+};
+
+
+  // NAVBAR 
+if (navbarContainer) {
+  fetch("includes/navbar.php")
+    .then((res) => res.text())
+    .then((data) => {
+      navbarContainer.innerHTML = data;
+
+      const page = body.dataset.page;
+      const dashboardNav = document.getElementById("dashboard-nav");
+      const adminNav = document.getElementById("admin-nav");
+
+      if (page === "dashboard") {
+        dashboardNav?.classList.remove("hidden");
+        adminNav?.classList.add("hidden");
+        setupDarkMode("dashboard");
+        setupMobileMenu();
+        setupDashboardLogout();
+        setupDashboardProfile();  
+        setTimeout(() => {
+            const userName = localStorage.getItem("currentUserName") || "User Name";
+            const userPic = localStorage.getItem("currentUserProfilePic") || "assets/images/unknown.jpg";
+            const mobileName = document.getElementById("mobileUserName");
+            const desktopName = document.getElementById("dashboardUserName");
+            const mobilePic = document.getElementById("mobileProfilePic");
+            const desktopPic = document.getElementById("dashboardProfilePic");
+
+            if (mobileName) mobileName.textContent = userName;
+            if (desktopName) desktopName.textContent = userName;
+            if (mobilePic) mobilePic.src = userPic;
+            if (desktopPic) desktopPic.src = userPic;
+          }, 300);
+      } else if (page === "admin") {
+        adminNav?.classList.remove("hidden");
+        dashboardNav?.classList.add("hidden");
+        setupDarkMode("admin");
+        setupNotifications();
+        setupAdminLogout(); 
+      }
+
+// DASHBOARD LOGOUT
+function setupDashboardLogout() {
+  const logoutBtns = document.querySelectorAll("#dashboardlogoutBtn, #mobileLogoutBtn");
+  if (!logoutBtns.length) return;
+
+  logoutBtns.forEach((logoutBtn) => {
+    logoutBtn.addEventListener("click", async () => {
+      const Swal = window.Swal || {
+        fire: (opts) => {
+          alert(opts?.title || "Alert");
+          return Promise.resolve({ isConfirmed: true });
+        },
+      };
+
+      const result = await Swal.fire({
+        title: "Log Out?",
+        text: "Are you sure you want to log out?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Log Out",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: "#E43636",
+      });
+
+      if (result.isConfirmed) {
+        localStorage.removeItem("currentUserName");
+        localStorage.removeItem("currentUserRole");
+        localStorage.removeItem("currentUserEmail"); 
+        localStorage.removeItem("sessionExpiry");
+        sessionStorage.clear();
+
+        await fetch("logout.php").catch(() => {});
+
+        Swal.fire({
+          title: "Logged Out",
+          text: "You have been successfully logged out.",
+          icon: "success",
+          confirmButtonColor: "#E43636",
+        }).then(() => {
+          window.location.href = "index.php";
+        });
+      }
+    });
+  });
+
+  // SESSION EXPIRE
+  const sessionDuration = 1 * 60 * 1000;
+  const now = Date.now();
+  localStorage.setItem("sessionExpiry", (now + sessionDuration).toString());
+
+  const checkSession = () => {
+    const expiry = parseInt(localStorage.getItem("sessionExpiry") || "0", 10);
+    if (Date.now() >= expiry) {
+
+  const preservedPics = {};
+  Object.keys(localStorage).forEach((key) => {
+    if (key.startsWith("profilePic_")) {
+      preservedPics[key] = localStorage.getItem(key);
+    }
+  });
+
+
+  localStorage.removeItem("currentUserName");
+  localStorage.removeItem("currentUserRole");
+  localStorage.removeItem("currentUserEmail");
+  localStorage.removeItem("currentUserProfilePic");
+  localStorage.removeItem("sessionExpiry");
+  sessionStorage.clear();
+
+
+  Object.entries(preservedPics).forEach(([key, value]) => {
+    localStorage.setItem(key, value);
+  });
+
+  Swal.fire({
+    title: "Session Expired",
+    text: "Your session has expired. Please log in again.",
+    icon: "info",
+    confirmButtonText: "OK",
+    confirmButtonColor: "#E43636",
+  }).then(() => {
+    window.location.href = "index.php";
+  });
+}
+ else setTimeout(checkSession, 10000);
+  };
+  setTimeout(checkSession, 10000);
+}
+
+
+
+// ADMIN LOGOUT 
+function setupAdminLogout() {
+  const logoutBtn = document.getElementById("adminlogoutBtn");
+  if (!logoutBtn) return;
+
+  logoutBtn.addEventListener("click", async () => {
+    const Swal = window.Swal;
+
+    const result = await Swal.fire({
+      title: "Log Out?",
+      text: "Are you sure you want to log out from the admin panel?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Log Out",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#E43636",
+    });
+
+    if (result.isConfirmed) {
+      localStorage.removeItem("currentUserName");
+      localStorage.removeItem("currentUserRole");
+      sessionStorage.clear();
+
+      await fetch("logout.php").catch(() => {});
+
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", () => {
+        window.history.pushState(null, "", window.location.href);
+      });
+
+      Swal.fire({
+        title: "Logged Out",
+        text: "You have been successfully logged out.",
+        icon: "success",
+        confirmButtonColor: "#E43636",
+      }).then(() => {
+        window.location.href = "index.php";
+      });
+    }
+  });
+}
+
+    })
+    .catch((err) => console.error("Error loading navbar:", err));
+}
+
+  
+
+  // DARK MODE 
+function setupDarkMode(pageType) {
+  let darkKey, darkToggleDesktop, sliderCircleDesktop, darkToggleMobile, sliderCircleMobile;
+
+  const currentUserEmail = localStorage.getItem("currentUserEmail") || "guest";
+  darkKey = `darkMode_${pageType}_${currentUserEmail}`; // e.g. darkMode_dashboard_john@gmail.com
+
+  if (pageType === "dashboard") {
+    darkToggleDesktop = document.getElementById("darkModeToggleDashboard");
+    sliderCircleDesktop = document.getElementById("sliderCircleDashboard");
+    darkToggleMobile = document.getElementById("darkModeToggleMobile");
+    sliderCircleMobile = document.getElementById("sliderCircleMobile");
+  } else if (pageType === "admin") {
+    darkToggleDesktop = document.getElementById("darkModeToggleAdmin");
+    sliderCircleDesktop = document.getElementById("sliderCircleAdmin");
   }
 
-  // =================== NOTIFICATIONS (ADMIN) ===================
+  function setDarkMode(isDark) {
+    if (isDark) {
+      body.classList.add("dark-mode");
+      body.classList.remove("light-mode");
+
+      if (sliderCircleDesktop) {
+        sliderCircleDesktop.textContent = "🌙";
+        sliderCircleDesktop.classList.add("translate-x-6");
+        sliderCircleDesktop.classList.remove("translate-x-0");
+      }
+      if (sliderCircleMobile) {
+        sliderCircleMobile.textContent = "🌙";
+        sliderCircleMobile.classList.add("translate-x-6");
+        sliderCircleMobile.classList.remove("translate-x-0");
+      }
+    } else {
+      body.classList.add("light-mode");
+      body.classList.remove("dark-mode");
+
+      if (sliderCircleDesktop) {
+        sliderCircleDesktop.textContent = "☀️";
+        sliderCircleDesktop.classList.add("translate-x-0");
+        sliderCircleDesktop.classList.remove("translate-x-6");
+      }
+      if (sliderCircleMobile) {
+        sliderCircleMobile.textContent = "☀️";
+        sliderCircleMobile.classList.add("translate-x-0");
+        sliderCircleMobile.classList.remove("translate-x-6");
+      }
+    }
+  }
+
+  const savedDark = localStorage.getItem(darkKey) === "true";
+  setDarkMode(savedDark);
+
+  if (darkToggleDesktop) darkToggleDesktop.checked = savedDark;
+  if (darkToggleMobile) darkToggleMobile.checked = savedDark;
+
+  if (darkToggleDesktop) {
+    darkToggleDesktop.addEventListener("change", (e) => {
+      const isDark = e.target.checked;
+      setDarkMode(isDark);
+      localStorage.setItem(darkKey, isDark);
+      if (darkToggleMobile) darkToggleMobile.checked = isDark;
+    });
+  }
+
+  if (darkToggleMobile) {
+    darkToggleMobile.addEventListener("change", (e) => {
+      const isDark = e.target.checked;
+      setDarkMode(isDark);
+      localStorage.setItem(darkKey, isDark);
+      if (darkToggleDesktop) darkToggleDesktop.checked = isDark;
+    });
+  }
+}
+
+
+  // MOBILE MENU 
+function setupMobileMenu() {
+  const menuBtn = document.getElementById("menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+  if (!menuBtn || !mobileMenu) return;
+
+  menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); 
+    if (mobileMenu.classList.contains("show")) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (
+      mobileMenu.classList.contains("show") &&
+      !mobileMenu.contains(e.target) &&
+      e.target !== menuBtn
+    ) {
+      closeMenu();
+    }
+  });
+
+  function openMenu() {
+    mobileMenu.classList.add("show");
+    const height = mobileMenu.scrollHeight + "px";
+    mobileMenu.style.height = "0";
+    requestAnimationFrame(() => {
+      mobileMenu.style.height = height;
+    });
+    mobileMenu.addEventListener(
+      "transitionend",
+      () => {
+        mobileMenu.style.height = "";
+      },
+      { once: true }
+    );
+  }
+
+  function closeMenu() {
+    const height = mobileMenu.scrollHeight;
+    mobileMenu.style.height = height + "px";
+    requestAnimationFrame(() => {
+      mobileMenu.style.height = "0";
+    });
+    mobileMenu.addEventListener(
+      "transitionend",
+      () => {
+        mobileMenu.classList.remove("show");
+        mobileMenu.style.height = "";
+      },
+      { once: true }
+    );
+  }
+}
+
+  // NOTIFICATIONS 
   function setupNotifications() {
     const notifBtn = document.getElementById("notif-btn")
     const notifDropdown = document.getElementById("notif-dropdown")
     const notifCount = document.getElementById("notif-count")
     const notifList = document.getElementById("notif-list")
+    const Swal = window.Swal // Declare Swal here
     if (!notifBtn || !notifDropdown || !notifList) return
 
     notifBtn.addEventListener("click", (event) => {
@@ -275,33 +551,45 @@ document.addEventListener("DOMContentLoaded", () => {
       notifList.innerHTML = ""
 
       activeReports
-        .slice()
-        .reverse()
-        .forEach((r) => {
-          const li = document.createElement("li")
-          li.id = `notif-${r.id}`
-          li.className =
-            "p-3 cursor-pointer hover:bg-gray-100 transition-colors duration-150 ease-in-out w-full select-none"
+  .slice()
+  .reverse()
+  .forEach((r) => {
+    const li = document.createElement("li");
+    li.id = `notif-${r.id}`;
+    li.className =
+      "p-3 cursor-pointer hover:bg-gray-100 transition-colors duration-150 ease-in-out w-full select-none";
 
-          let roomHTML = ""
-          let floorHTML = ""
-          if (r.facilityType === "Room") {
-            roomHTML = `<p class="text-sm">Room No.: ${r.roomNumber || "N/A"}</p>`
-          } else if (["CR", "Elevator", "Library", "Escalator"].includes(r.facilityType)) {
-            floorHTML = `<p class="text-sm">Floor: ${r.floor || "N/A"}</p>`
-          }
+    let roomHTML = "";
+    let floorHTML = "";
+    if (r.facilityType === "Room") {
+      roomHTML = `<p class="text-sm">Room No.: ${r.roomNumber || "N/A"}</p>`;
+    } else if (["CR", "Elevator", "Library", "Escalator"].includes(r.facilityType)) {
+      floorHTML = `<p class="text-sm">Floor: ${r.floor || "N/A"}</p>`;
+    }
 
-          li.innerHTML = `
-          <p class="font-semibold text-red-600">${r.title}</p>
-          <p class="text-sm">Building: ${r.buildingName || "N/A"}</p>
-          <p class="text-sm">Facility Type: ${r.facilityType || "N/A"}</p>
-          ${roomHTML}
-          ${floorHTML}
-          <p class="text-sm">${r.description || "N/A"}</p>
-          <p class="text-xs text-gray-500 mt-1">${r.status}</p>
-        `
-          notifList.appendChild(li)
-        })
+    // 🟡🔵🟢 Status color
+    const statusColor =
+      r.status === "Pending"
+        ? "bg-[#EAB308] text-white"
+        : r.status === "In Progress"
+        ? "bg-[#3B82F6] text-white"
+        : "bg-[#16A34A] text-white"; // Completed = green
+
+    li.innerHTML = `
+      <p class="font-semibold text-red-600">${r.title}</p>
+      <p class="text-sm">Building: ${r.buildingName || "N/A"}</p>
+      <p class="text-sm">Facility Type: ${r.facilityType || "N/A"}</p>
+      ${roomHTML}
+      ${floorHTML}
+      <p class="text-sm">${r.description || "N/A"}</p>
+      <span class="inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full ${statusColor}">
+        ${r.status}
+      </span>
+    `;
+
+    notifList.appendChild(li);
+  });
+
     }
 
     loadNotifications()
@@ -311,7 +599,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(loadNotifications, 2000)
   }
 
-  // FACILITY / FLOOR / ROOM LOGIC
+  // FACILITY / FLOOR / ROOM 
   const bldgSelect = document.getElementById("reportBldg")
   const facilitySelect = document.getElementById("facilityType")
   const floorContainer = document.getElementById("floorContainer")
@@ -427,63 +715,138 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   if (facilitySelect) facilitySelect.addEventListener("change", updateFields)
 
-  // REPORT SUBMISSION (DASHBOARD)
-  const reportForm = document.getElementById("reportForm")
-  if (reportForm) {
-    reportForm.addEventListener("submit", (e) => {
-      e.preventDefault()
+  // REPORT SUBMISSION 
+const reportForm = document.getElementById("reportForm");
 
-      const title = document.getElementById("reportTitle")?.value.trim()
-      const building = document.getElementById("reportBldg")?.value.trim()
-      const facility = document.getElementById("facilityType")?.value.trim()
-      const room = document.getElementById("reportRoom")?.value.trim()
-      const floor = document.getElementById("reportFloor")?.value.trim()
-      const desc = document.getElementById("reportDesc")?.value.trim()
-      const fileInput = document.getElementById("reportFile")
+if (reportForm) {
+  reportForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    console.log("✅ Report form submitted");
 
-      if (!title || !building || !desc) return
-      if (facility === "Room" && !room) return
-      if ((facility === "CR" || facility === "Comfort Room") && !floor) return
+    const title = document.getElementById("reportTitle")?.value.trim();
+    const building = document.getElementById("reportBldg")?.value.trim();
+    const facility = document.getElementById("facilityType")?.value.trim();
+    const room = document.getElementById("reportRoom")?.value.trim();
+    const floor = document.getElementById("reportFloor")?.value.trim();
+    const desc = document.getElementById("reportDesc")?.value.trim();
+    const fileInput = document.getElementById("reportFile");
+    const Swal = window.Swal;
 
-      const file = fileInput?.files[0]
-      const reader = new FileReader()
+    if (!title || !building || !desc) {
+      Swal.fire("Missing Fields", "Please complete all required fields.", "warning");
+      return;
+    }
+    if (facility === "Room" && !room) {
+      Swal.fire("Missing Room", "Please enter the room number.", "warning");
+      return;
+    }
+    if ((facility === "CR" || facility === "Comfort Room") && !floor) {
+      Swal.fire("Missing Floor", "Please select the floor.", "warning");
+      return;
+    }
 
-      reader.onload = () => {
-        const newReport = {
-          id: Date.now(),
-          title,
-          buildingName: building,
-          facilityType: facility,
-          floor: facility === "CR" || facility === "Comfort Room" ? floor : null,
-          roomNumber: facility === "Room" ? room : null,
-          description: desc,
-          fileName: file?.name || null,
-          fileData: file ? reader.result : null,
-          status: "Pending",
-          dateSubmitted: new Date().toLocaleString(),
-          name: "Unknown",
-        }
+    const file = fileInput?.files[0];
+    const currentUserName = localStorage.getItem("currentUserName") || "Unknown";
 
-        const reports = JSON.parse(localStorage.getItem("maintenanceReports") || "[]")
-        reports.push(newReport)
-        localStorage.setItem("maintenanceReports", JSON.stringify(reports))
+    if (file) {
+  const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/pjpeg"];
+  const maxSize = 2 * 1024 * 1024; // 2 MB
+  const fileExt = file.name.split(".").pop().toLowerCase();
 
-        const Swal = window.Swal
-        Swal.fire({
-          title: "Report Submitted!",
-          text: `Your report "${title}" has been submitted successfully.`,
-          icon: "success",
-          confirmButtonText: "OK!",
-          confirmButtonColor: "#E43636",
-        }).then(() => reportForm.reset())
-      }
+  console.log("File selected:", file.name, file.type, file.size, fileExt);
 
-      if (file) reader.readAsDataURL(file)
-      else reader.onload()
-    })
+  const validByType = allowedTypes.includes(file.type);
+  const validByExt = ["png", "jpg", "jpeg"].includes(fileExt);
+
+  if (!(validByType || validByExt)) {
+    Swal.fire({
+      title: "Invalid File Type",
+      text: "Please upload only PNG, JPG, or JPEG images.",
+      icon: "warning",
+      confirmButtonColor: "#E43636",
+    });
+    fileInput.value = "";
+    return;
   }
 
-  // ADMIN REPORT DISPLAY
+  if (file.size > maxSize) {
+    Swal.fire({
+      title: "File Too Large",
+      text: "Please upload an image smaller than 2 MB.",
+      icon: "warning",
+      confirmButtonColor: "#E43636",
+    });
+    fileInput.value = "";
+    return;
+  }
+}
+
+    
+
+    const toBase64 = (file) =>
+      new Promise((resolve) => {
+        if (!file) return resolve(null);
+        const reader = new FileReader();
+        reader.onload = () => {
+          console.log("FileReader success ✅");
+          resolve(reader.result);
+        };
+        reader.onerror = (err) => {
+          console.error("FileReader error ❌:", err);
+          resolve(null); 
+        };
+        reader.readAsDataURL(file);
+      });
+
+    try {
+      const fileData = await toBase64(file);
+
+      const newReport = {
+        id: Date.now(),
+        title,
+        buildingName: building,
+        facilityType: facility,
+        floor: facility === "CR" || facility === "Comfort Room" ? floor : null,
+        roomNumber: facility === "Room" ? room : null,
+        description: desc,
+        fileName: file?.name || null,
+        fileData, 
+        status: "Pending",
+        dateSubmitted: new Date().toLocaleString(),
+        name: currentUserName,
+      };
+
+      console.log("Saving report to localStorage:", newReport);
+
+      const reports = JSON.parse(localStorage.getItem("maintenanceReports") || "[]");
+      reports.push(newReport);
+      localStorage.setItem("maintenanceReports", JSON.stringify(reports));
+
+      await Swal.fire({
+        title: "Report Submitted!",
+        text: `Your report "${title}" has been submitted successfully.`,
+        icon: "success",
+        confirmButtonText: "OK!",
+        confirmButtonColor: "#E43636",
+      });
+
+      reportForm.reset();
+      fileInput.value = "";
+    } catch (err) {
+      console.error("❌ Unexpected submission error:", err);
+      Swal.fire({
+        title: "Error",
+        text: "Failed to submit your report. Please try again.",
+        icon: "error",
+        confirmButtonColor: "#E43636",
+      });
+    }
+  });
+}
+
+
+
+  // ADMIN REPORT DISPLAY 
   function loadAdminReports() {
     const reports = JSON.parse(localStorage.getItem("maintenanceReports") || "[]")
     const reportList = document.getElementById("report-list")
@@ -525,7 +888,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (body.dataset.page === "admin") loadAdminReports()
 
-  // ADMIN REQUEST LIST DISPLAY 
+  // ADMIN REQUEST LIST DISPLAY
   const requestsList = document.getElementById("requestsList")
   if (requestsList) {
     window.loadReports = (currentFilter = "All") => {
@@ -573,7 +936,6 @@ document.addEventListener("DOMContentLoaded", () => {
         requestsList.appendChild(li)
       })
 
-      // Update counts
       const totalEl = document.getElementById("totalRequests")
       const pendingEl = document.getElementById("pendingCount")
       const inProgEl = document.getElementById("inProgressCount")
@@ -584,7 +946,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (inProgEl) inProgEl.textContent = inProgress
       if (complEl) complEl.textContent = completed
 
-      // Status change listener
       document.querySelectorAll(".statusSelect").forEach((select) => {
         select.addEventListener("change", (e) => {
           const id = Number(e.target.dataset.id)
@@ -596,7 +957,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
       })
 
-      // Filter dropdown
       const statusFilter = document.getElementById("statusFilter")
       if (statusFilter) {
         statusFilter.value = currentFilter
@@ -615,9 +975,9 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
-  // FOOTER
+  // FOOTER 
   if (footerContainer) {
-    fetch("includes/footer.html")
+    fetch("includes/footer.php")
       .then((res) => res.text())
       .then((data) => {
         footerContainer.innerHTML = data
@@ -648,10 +1008,11 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((err) => console.error("Error loading footer:", err))
   }
 
-  // ANNOUNCEMENTS (ADMIN) 
+  // ANNOUNCEMENTS (ADMIN)
   const announceList = document.getElementById("announcementList")
   const announceTitle = document.getElementById("announceTitle")
   const announceDesc = document.getElementById("announceDesc")
+  const Swal = window.Swal 
 
   window.toggleAnnouncementForm = () => {
     const form = document.getElementById("announcementForm")
@@ -769,5 +1130,103 @@ document.addEventListener("DOMContentLoaded", () => {
         renderAnnouncements()
       }
     })
+    
   }
+// PROFILE VIEW & CHANGE SYSTEM 
+function setupDashboardProfile() {
+  const defaultPic = "assets/images/unknown.jpg";
+  const desktopPic = document.getElementById("dashboardProfilePic");
+  const mobilePic = document.getElementById("mobileProfilePic");
+  const desktopName = document.getElementById("dashboardUserName");
+  const mobileName = document.getElementById("mobileUserName");
+  const profileSection = document.getElementById("profileSection");
+  const mobileProfileSection = document.getElementById("mobileProfileSection");
+
+  const modal = document.getElementById("profileModal");
+  const modalPic = document.getElementById("modalProfilePic");
+  const modalName = document.getElementById("modalUserName");
+  const closeModal = document.getElementById("closeProfileModal");
+  const changeBtn = document.getElementById("changeProfilePicBtn");
+  const fileInput = document.getElementById("editProfilePicInput");
+
+  const viewModal = document.getElementById("viewProfileModal");
+  const viewImg = document.getElementById("viewProfileImage");
+  const closeViewModal = document.getElementById("closeViewProfileModal");
+
+  if (!profileSection || !modal) return;
+
+  // NAME AND PROFILE PICTURE 
+  const storedName = localStorage.getItem("currentUserName") || "User Name";
+  const storedPic = localStorage.getItem("currentUserProfilePic") || defaultPic;
+
+  [desktopPic, mobilePic, modalPic].forEach((el) => el && (el.src = storedPic));
+  [desktopName, mobileName, modalName].forEach((el) => el && (el.textContent = storedName));
+
+  const openProfileModal = () => {
+    modal.classList.remove("hidden");
+    modalPic.src = localStorage.getItem("currentUserProfilePic") || defaultPic;
+    modalName.textContent = localStorage.getItem("currentUserName") || "User Name";
+  };
+
+  profileSection.addEventListener("click", openProfileModal);
+  mobileProfileSection.addEventListener("click", openProfileModal);
+
+  closeModal.addEventListener("click", () => modal.classList.add("hidden"));
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.add("hidden");
+  });
+
+  changeBtn.addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const validTypes = ["image/png", "image/jpeg", "image/jpg"];
+    if (!validTypes.includes(file.type)) {
+      Swal.fire({
+        title: "Invalid File",
+        text: "Please upload a PNG or JPG image.",
+        icon: "warning",
+        confirmButtonColor: "#E43636",
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result;
+
+const currentUserEmail = localStorage.getItem("currentUserEmail");
+if (currentUserEmail) {
+  const picKey = `profilePic_${currentUserEmail}`;
+  localStorage.setItem(picKey, base64); 
+}
+localStorage.setItem("currentUserProfilePic", base64); 
+
+
+      [modalPic, desktopPic, mobilePic].forEach((el) => el && (el.src = base64));
+
+      Swal.fire({
+        title: "Profile Picture Updated!",
+        text: "Your new profile picture has been saved successfully.",
+        icon: "success",
+        confirmButtonColor: "#E43636",
+      });
+    };
+    reader.readAsDataURL(file);
+  });
+
+  modalPic.addEventListener("click", () => {
+    const src = modalPic.src || defaultPic;
+    viewImg.src = src;
+    viewModal.classList.remove("hidden");
+  });
+
+  closeViewModal.addEventListener("click", () => viewModal.classList.add("hidden"));
+  viewModal.addEventListener("click", (e) => {
+    if (e.target === viewModal) viewModal.classList.add("hidden");
+  });
+}
+  
 })
+

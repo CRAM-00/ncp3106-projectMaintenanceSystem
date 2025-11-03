@@ -94,6 +94,22 @@
     </div>
   </section>
 
+  <!-- PROFILE SECTION -->
+<div class="form-card profile-card hidden" id="profileSection">
+  <div class="profile-container">
+    <div class="profile-pic-wrapper">
+      <img id="profilePreview" src="assets/images/default-profile.png" alt="Profile Picture" class="profile-pic" />
+      <input type="file" id="profileUpload" accept="image/*" hidden />
+      <button type="button" id="changePicBtn" class="change-pic-btn">Change Picture</button>
+    </div>
+
+    <div class="profile-details">
+      <p id="profileName" class="profile-name">First Last</p>
+    </div>
+  </div>
+</div>
+
+
   <!-- FOOTER -->
   <div id="footer-container"></div>
 

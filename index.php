@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>University Login & Sign Up</title>
+    <link rel="stylesheet" href="assets/style/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body data-page="index">
+  <div class="container">
+    <div class="background"></div>
+    
+    <div class="content">
+      <!-- LOGIN FORM -->
+<form class="form-card active" id="loginForm" onsubmit="event.preventDefault(); handleLogin();">
+  <div class="logo-container">
+    <img src="assets/images/uelogo.png" alt="University Logo" class="logo-img" />
+  </div>
+
+  <div class="form-group">
+    <input type="email" id="loginEmail" class="form-input" placeholder="Email" required/>
+  </div>
+
+  <div class="form-group">
+    <input type="password" id="loginPassword" class="form-input" placeholder="Password" required/>
+  </div>
+
+  <div class="button-container">
+    <button type="submit" class="action-button">Login</button>
+  </div>
+
+  <div class="switch-text">
+    Don’t have an account? <span onclick="showSignup()">Sign up</span>
+  </div>
+
+  <p id="error-message" class="errorMessage"></p>
+</form>
+
+
+     <form class="form-card" id="signupForm" onsubmit="event.preventDefault(); handleSignup();">
+  <div class="logo-container">
+    <img src="assets/images/uelogo.png" alt="University Logo" class="logo-img" />
+  </div>
+
+  <div class="form-group">
+    <select id="signupRole" class="form-select" required>
+      <option value="" disabled selected>Select Role</option>
+      <option value="complainant">Complainant</option>
+      <option value="maintenance personnel">Maintenance Personnel</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <input type="text" id="firstName" class="form-input" placeholder="First Name" required/>
+  </div>
+
+  <div class="form-group">
+    <input type="text" id="lastName" class="form-input" placeholder="Last Name" required/>
+  </div>
+
+  <div class="form-group">
+    <input type="email" id="signupEmail" class="form-input" placeholder="Email" required/>
+  </div>
+
+  <div class="form-group">
+    <input type="password" id="signupPassword" class="form-input" placeholder="Password" required/>
+  </div>
+
+  <div class="button-container">
+    <button type="submit" class="action-button">Register</button>
+  </div>
+
+  <div class="switch-text">
+    Already have an account? <span onclick="showLogin()">Login</span>
+  </div>
+</form>
+`
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>

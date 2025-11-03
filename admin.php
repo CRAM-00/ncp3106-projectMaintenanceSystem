@@ -93,12 +93,14 @@
       </div>
     </section>
   </main>
-
+  
   <!-- FOOTER -->
   <div id="footer-container"></div>
 
   <!--NAVBAR -->
   <div id="navbar-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- SCRIPT -->
   <script src="assets/js/script.js"></script>
