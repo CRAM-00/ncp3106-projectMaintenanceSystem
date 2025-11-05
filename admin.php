@@ -75,21 +75,27 @@
 
         <!-- Announcement Form -->
         <form id="announcementForm" class="hidden mb-4 bg-white/20 p-3 rounded" onsubmit="addAnnouncement(event)">
-          <input id="announceTitle" type="text" placeholder="Title"
-            class="w-full mb-2 px-2 py-1 text-black rounded" required>
-          <textarea id="announceDesc" rows="2" placeholder="Description"
-            class="w-full px-2 py-1 text-black rounded" required></textarea>
-          <div class="flex justify-end mt-2 gap-2">
-  <button type="button" onclick="addAnnouncement()"
-    class="bg-white text-[#E43636] px-3 py-1 rounded font-semibold hover:bg-gray-200">Add</button>
-  <button type="button" onclick="toggleAnnouncementForm()"
-    class="bg-white text-[#E43636] px-3 py-1 rounded font-semibold hover:bg-gray-200">Cancel</button>
-</div>
-        </form>
+  <input id="announceTitle" type="text" placeholder="Title"
+    class="w-full mb-2 px-2 py-1 text-black rounded" required>
+  <textarea id="announceDesc" rows="2" placeholder="Description"
+    class="w-full px-2 py-1 text-black rounded" required></textarea>
+  <div class="flex justify-end mt-2 gap-2">
+    <button type="submit"
+      class="bg-white text-[#E43636] px-3 py-1 rounded font-semibold hover:bg-gray-200">Add</button>
+    <button type="cancel" onclick="toggleAnnouncementForm(); return false;"
+  class="bg-white text-[#E43636] px-3 py-1 rounded font-semibold hover:bg-gray-200">Cancel</button>
+
+  </div>
+</form>
 
 
 
-        <div id="announcementList" class="space-y-3"></div>
+
+        <div 
+  id="announcementList"
+  class="space-y-3 overflow-y-auto max-h-96 pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 rounded-lg"
+></div>
+
       </div>
     </section>
   </main>

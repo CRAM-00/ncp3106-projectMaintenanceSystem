@@ -23,12 +23,19 @@
            class="pt-24 px-4 sm:px-6 md:px-8 lg:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-center gap-6 overflow-x-hidden">
 
     <!-- ANNOUNCEMENTS -->
-    <div id="announcements-section" class="flex flex-col w-full">
-      <h1 class="text-4xl font-bold mb-6 text-center w-full">📢 Announcements</h1>
-      <div id="announcements" class="flex flex-col items-center gap-6 w-full">
-        <h2 class="text-xl font-semibold text-red-700 mb-2 text-center">System Maintenance Notice</h2>
-      </div>
-    </div>
+<div id="announcements-section" class="flex flex-col w-full">
+  <h1 class="text-4xl font-bold mb-6 text-center w-full">📢 Announcements</h1>
+
+  <div
+    id="announcements"
+    class="flex flex-col items-center space-y-3 overflow-y-auto pr-2
+           scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 rounded-lg w-full"
+  >
+    <h2 class="text-xl font-semibold text-red-700 mb-2 text-center">
+      System Maintenance Notice
+    </h2>
+  </div>
+</div>
 
     <!-- REPORT A PROBLEM -->
     <div id="report-section" class="w-full">

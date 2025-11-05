@@ -4,21 +4,24 @@ include 'connection.php';
 
 $title = $_POST['title'] ?? '';
 $building = $_POST['building'] ?? '';
-$facility = $_POST['facility'] ?? '';
+$facility = $_POST['facilityType'] ?? '';
 $floor = $_POST['floor'] ?? '';
 $room = $_POST['room'] ?? '';
 $desc = $_POST['description'] ?? '';
 $name = $_POST['name'] ?? 'Unknown';
-$fileName = $_FILES['file']['name'] ?? null;
+$imageData = $_POST['imageData'] ?? ''; // ✅ Base64 from JS
+$fileName = $imageData ? 'uploaded_image.jpg' : null;
 $fileData = null;
+
+// Decode Base64 image if available
+if (!empty($imageData)) {
+    $imageData = preg_replace('#^data:image/\w+;base64,#i', '', $imageData);
+    $fileData = base64_decode($imageData);
+}
 
 if (!$title || !$building || !$desc) {
     echo json_encode(['status' => 'error', 'message' => 'Please fill all required fields.']);
     exit;
-}
-
-if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-    $fileData = file_get_contents($_FILES['file']['tmp_name']);
 }
 
 $stmt = $conn->prepare("INSERT INTO reports (title, building_name, facility_type, floor, room_number, description, file_name, file_data, reporter_name)

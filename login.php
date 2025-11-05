@@ -1,9 +1,6 @@
 <?php
 header('Content-Type: application/json');
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-include 'connection.php'; // ensure this points to your DB connection
+include 'connection.php';
 
 $email = $_POST['loginEmail'] ?? '';
 $password = $_POST['loginPassword'] ?? '';
@@ -13,7 +10,6 @@ if (empty($email) || empty($password)) {
     exit;
 }
 
-// Check if user exists
 $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
@@ -26,20 +22,31 @@ if ($result->num_rows === 0) {
 
 $user = $result->fetch_assoc();
 
-// Verify password
 if (!password_verify($password, $user['password'])) {
     echo json_encode(['status' => 'error', 'message' => 'Incorrect password.']);
     exit;
 }
 
-// ✅ Return user info
-echo json_encode([
-    'status' => 'success',
-    'first_name' => $user['first_name'],
-    'last_name' => $user['last_name'],
-    'role' => $user['role'],
-    'name' => $user['first_name'] . ' ' . $user['last_name']
-]);
+// ✅ Generate a new unique session token for this device
+$sessionToken = bin2hex(random_bytes(32)); // secure random token
 
+// ✅ Save it to the database
+$update = $conn->prepare("UPDATE users SET session_token = ? WHERE email = ?");
+$update->bind_param("ss", $sessionToken, $email);
+$update->execute();
+
+// ✅ Return token + user data
+$response = [
+  'status' => 'success',
+  'role' => $user['role'],
+  'first_name' => $user['first_name'],
+  'last_name' => $user['last_name'],
+  'name' => $user['first_name'] . ' ' . $user['last_name'],
+  'dark_mode' => $user['dark_mode'],
+  'profile_pic' => $user['profile_pic'] ? 'data:image/jpeg;base64,' . base64_encode($user['profile_pic']) : null,
+  'session_token' => $sessionToken // 👈 return the token to browser
+];
+
+echo json_encode($response);
 $conn->close();
 ?>

@@ -257,10 +257,30 @@ body.dark-mode #mobile-menu label > span {
 }
 
 /* DASHBOARD / ADMIN */
-#announcements {
-  max-height: 80vh;
-  overflow-y: auto;
-}
+  #announcements {
+    max-height: 20rem; /* about 2 cards tall (~320px) */
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+
+  /* Desktop / Laptop (4 announcements max) */
+  @media (min-width: 768px) {
+    #announcements {
+      max-height: 32rem; /* about 4 cards tall (~512px) */
+    }
+  }
+
+  /* ✅ Clean scrollbar */
+  #announcements::-webkit-scrollbar {
+    width: 8px;
+  }
+  #announcements::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 9999px;
+  }
+  #announcements::-webkit-scrollbar-track {
+    background: #f3f4f6;
+  }
 
 
 .dark-mode .card,
@@ -554,19 +574,47 @@ body.dark-mode input[type="file"]::file-selector-button {
   transition: all 0.3s ease;
 }
 
+/* NOTIFICATION DROPDOWN BASE STYLES */
 #notif-dropdown {
-  transform-origin: top;
+  transform-origin: top right;
   transform: scaleY(0);
   opacity: 0;
   pointer-events: none;
   transition: all 0.3s ease;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 18rem; /* default for desktop */
+  max-height: 70vh;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  z-index: 50;
 }
 
+/* SHOW DROPDOWN */
 #notif-dropdown.show {
   transform: scaleY(1);
   opacity: 1;
   pointer-events: auto;
 }
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 640px) {
+  #notif-dropdown {
+    position: fixed;
+    top: 4.5rem; /* below navbar */
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+    transform-origin: top center;
+    max-height: 80vh;
+    border-radius: 0.75rem;
+    overflow-y: auto;
+  }
+}
+
 
 
 /*  RESPONSIVE MENU */
